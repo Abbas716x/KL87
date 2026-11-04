@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>لوحة تحكم الأدمن | BRAND STORE ADMIN PANEL</title>
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!-- Google Fonts: Cairo & Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Main Style Sheet -->
+    <link rel="stylesheet" href="/styles/main.css">
+  </head>
+  <body class="bg-[#090D16] text-slate-100 min-h-screen selection:bg-amber-500 selection:text-slate-900">
+
+    <!-- Top Ambient Glow -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-44 bg-gradient-to-b from-amber-500/15 via-indigo-600/10 to-transparent pointer-events-none blur-3xl z-0"></div>
+
+    <!-- ================= 1. SECURE LOGIN SCREEN (SCREEN 1) ================= -->
+    <div id="login-section" class="relative z-10 min-h-screen flex items-center justify-center p-4">
+      <div class="glass-panel w-full max-w-md rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl space-y-6">
+        
+        <!-- Header & Logo -->
+        <div class="text-center space-y-2">
+          <div class="inline-flex w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-300 p-0.5 shadow-xl shadow-amber-500/20">
+            <div class="w-full h-full bg-[#0F172A] rounded-[14px] flex items-center justify-center text-amber-400 font-black text-2xl">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-black text-white">لوحة تحكم المشرف</h1>
+          <p class="text-xs text-amber-400/90 font-bold tracking-wider">BRAND STORE • ADMIN GATEWAY</p>
+          <p class="text-xs text-slate-400">يرجى إدخال بيانات الاعتماد المعتمدة للوصول إلى نظام الإدارة</p>
+        </div>
+
+        <!-- Login Form -->
+        <form id="admin-login-form" class="space-y-4">
+          
+          <div class="space-y-1 text-right">
+            <label class="block text-xs font-bold text-slate-300" for="login-username">
+              اسم المستخدم (Username)
+            </label>
+            <div class="relative">
+              <input 
+                type="text" 
+                id="login-username" 
+                required 
+                autocomplete="off"
+                placeholder="أدخل اسم المستخدم..."
+                class="w-full glass-input rounded-xl py-3 pr-10 pl-3 text-sm font-bold placeholder:text-slate-500"
+              />
+              <i class="fa-solid fa-user absolute right-3.5 top-3.5 text-slate-400 text-sm"></i>
+            </div>
+          </div>
+
+          <div class="space-y-1 text-right">
+            <label class="block text-xs font-bold text-slate-300" for="login-password">
+              كلمة المرور (Password)
+            </label>
+            <div class="relative">
+              <input 
+                type="password" 
+                id="login-password" 
+                required 
+                autocomplete="off"
+                placeholder="أدخل كلمة المرور..."
+                class="w-full glass-input rounded-xl py-3 pr-10 pl-3 text-sm font-bold placeholder:text-slate-500"
+              />
+              <i class="fa-solid fa-key absolute right-3.5 top-3.5 text-slate-400 text-sm"></i>
+            </div>
+          </div>
+
+          <!-- Error Alert Banner -->
+          <div id="login-error-msg" class="hidden p-3 rounded-xl bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs font-bold flex items-center gap-2">
+            <i class="fa-solid fa-circle-exclamation text-rose-400 text-base"></i>
+            <span>بيانات الدخول غير صحيحة! يرجى التحقق من اسم المستخدم وكلمة المرور.</span>
+          </div>
+
+          <!-- Submit Button -->
+          <button 
+            type="submit" 
+            id="login-submit-btn"
+            class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm transition duration-200 shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+          >
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>تسجيل الدخول إلى النظام</span>
+          </button>
+        </form>
+
+        <!-- Back to Store Link -->
+        <div class="text-center pt-2 border-t border-slate-800">
+          <a href="/" class="text-xs text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5 font-bold">
+            <i class="fa-solid fa-arrow-right"></i>
+            <span>العودة إلى متجر BRAND STORE الرئيسي</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ================= 2. AUTHENTICATED ADMIN DASHBOARD (SCREEN 2) ================= -->
+    <div id="dashboard-section" class="hidden relative z-10 max-w-6xl mx-auto min-h-screen flex flex-col justify-between p-3 sm:p-5 space-y-5">
+
+      <!-- Top Dashboard Header -->
+      <header class="glass-nav rounded-2xl px-4 py-3 border border-slate-800 flex items-center justify-between gap-3 flex-wrap">
+        
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 font-black flex items-center justify-center text-xl shadow-md">
+            B
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="font-black text-sm sm:text-base text-white">لوحة تحكم BRAND STORE</h2>
+              <span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-black px-2 py-0.5 rounded-full border border-emerald-500/30">
+                مشرف مفعّل
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-400 flex items-center gap-1.5">
+              <span>Firebase: <strong class="text-indigo-300">vvbb-3956b</strong></span>
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>
+              <span class="text-emerald-400">متصل</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Dashboard Actions -->
+        <div class="flex items-center gap-2">
+          <a href="/" target="_blank" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-arrow-up-right-from-square text-indigo-400"></i>
+            <span>معاينة الكتالوج</span>
+          </a>
+          
+          <button id="admin-logout-btn" class="px-3 py-2 rounded-xl bg-rose-950/40 hover:bg-rose-900/50 text-rose-300 text-xs font-bold border border-rose-500/30 flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-power-off"></i>
+            <span>خروج</span>
+          </button>
+        </div>
+
+      </header>
+
+      <!-- Dashboard Quick Stats Bar -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="glass-card p-4 rounded-2xl border border-slate-800 flex items-center justify-between">
+          <div>
+            <span class="text-xs text-slate-400 font-bold block">إجمالي الأجهزة</span>
+            <span id="stat-products-count" class="text-xl sm:text-2xl font-black text-white mt-1 block">0</span>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+          </div>
+        </div>
+
+        <div class="glass-card p-4 rounded-2xl border border-slate-800 flex items-center justify-between">
+          <div>
+            <span class="text-xs text-slate-400 font-bold block">الأقسام المتاحة</span>
+            <span class="text-xl sm:text-2xl font-black text-amber-400 mt-1 block">8</span>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-shapes"></i>
+          </div>
+        </div>
+
+        <div class="glass-card p-4 rounded-2xl border border-slate-800 flex items-center justify-between">
+          <div>
+            <span class="text-xs text-slate-400 font-bold block">فيديوهات اكتشف (Reels)</span>
+            <span id="stat-reels-count" class="text-xl sm:text-2xl font-black text-rose-400 mt-1 block">0</span>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-play"></i>
+          </div>
+        </div>
+
+        <div class="glass-card p-4 rounded-2xl border border-slate-800 flex items-center justify-between">
+          <div>
+            <span class="text-xs text-slate-400 font-bold block">حالة المزامنة السحابية</span>
+            <span class="text-sm font-black text-emerald-400 mt-1 block">Firebase Live ✅</span>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Navigation Tabs -->
+      <div class="flex items-center gap-2 border-b border-slate-800 pb-2">
+        <button id="admin-tab-products" class="px-4 py-2 rounded-xl bg-indigo-600 text-white font-black text-xs transition flex items-center gap-1.5 shadow-md">
+          <i class="fa-solid fa-box-open"></i>
+          <span>إدارة كتالوج المنتجات</span>
+        </button>
+        <button id="admin-tab-reels" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white font-bold text-xs transition flex items-center gap-1.5">
+          <i class="fa-solid fa-video"></i>
+          <span>إدارة الريلز (اكتشف)</span>
+        </button>
+        <button id="admin-tab-database" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white font-bold text-xs transition flex items-center gap-1.5">
+          <i class="fa-solid fa-database"></i>
+          <span>البيانات والمزامنة</span>
+        </button>
+      </div>
+
+      <!-- ================= SECTION A: PRODUCTS MANAGEMENT ================= -->
+      <section id="admin-view-products" class="space-y-4">
+        
+        <!-- Action Bar: Add Product & Search -->
+        <div class="flex items-center justify-between gap-3 flex-wrap">
+          <div class="relative flex-1 min-w-[200px]">
+            <input 
+              type="text" 
+              id="admin-search-products" 
+              placeholder="ابحث في أجهزة المخزن..." 
+              class="w-full glass-input text-xs rounded-xl py-2.5 pr-9 pl-3"
+            />
+            <i class="fa-solid fa-magnifying-glass absolute right-3 top-3 text-slate-400 text-xs"></i>
+          </div>
+
+          <button 
+            id="open-add-product-btn" 
+            class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs transition flex items-center gap-2 shadow-lg shadow-amber-500/20 cursor-pointer"
+          >
+            <i class="fa-solid fa-plus"></i>
+            <span>إضافة جهاز جديد للكتالوج</span>
+          </button>
+        </div>
+
+        <!-- Products Table / Cards in Admin -->
+        <div class="glass-panel rounded-2xl overflow-hidden border border-slate-800">
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs">
+              <thead class="bg-slate-900/90 text-slate-400 border-b border-slate-800 font-bold">
+                <tr>
+                  <th class="p-3">الجهاز</th>
+                  <th class="p-3">القسم</th>
+                  <th class="p-3">الماركة</th>
+                  <th class="p-3">السعر المعتمد (د.ع)</th>
+                  <th class="p-3">الضمان</th>
+                  <th class="p-3 text-center">إجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="admin-products-table-body" class="divide-y divide-slate-800">
+                <!-- Populated dynamically via admin.ts -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= SECTION B: REELS MANAGEMENT ================= -->
+      <section id="admin-view-reels" class="space-y-4 hidden">
+        <div class="flex items-center justify-between">
+          <h3 class="font-black text-sm text-white">إدارة فيديوهات اكتشف (Reels)</h3>
+          <button id="open-add-reel-btn" class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs transition flex items-center gap-1.5 shadow-md">
+            <i class="fa-solid fa-plus"></i>
+            <span>إضافة ريل جديد</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3" id="admin-reels-grid">
+          <!-- Populated dynamically via admin.ts -->
+        </div>
+      </section>
+
+      <!-- ================= SECTION C: DATABASE & SYNC ================= -->
+      <section id="admin-view-database" class="space-y-4 hidden">
+        <div class="glass-panel p-5 rounded-3xl border border-slate-800 space-y-4">
+          <h3 class="font-black text-sm text-white flex items-center gap-2">
+            <i class="fa-solid fa-cloud-arrow-down text-indigo-400"></i>
+            <span>إعدادات قاعدة بيانات Firebase Firestore</span>
+          </h3>
+
+          <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2 text-xs">
+            <p class="text-slate-300 font-bold">معلومات الربط المباشر بمشروع العميل:</p>
+            <ul class="space-y-1 font-mono text-[11px] text-slate-400">
+              <li>• Project ID: <span class="text-indigo-400">vvbb-3956b</span></li>
+              <li>• Storage Bucket: <span class="text-slate-300">vvbb-3956b.firebasestorage.app</span></li>
+              <li>• Messaging Sender ID: <span class="text-slate-300">618916515558</span></li>
+              <li>• Collections: <span class="text-amber-400">products</span>, <span class="text-rose-400">reels</span></li>
+            </ul>
+          </div>
+
+          <div class="flex items-center gap-3 flex-wrap">
+            <button id="admin-sync-now-btn" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition flex items-center gap-2 shadow-md">
+              <i class="fa-solid fa-arrows-rotate"></i>
+              <span>مزامنة فورية مع Firebase</span>
+            </button>
+            <button id="admin-reset-defaults-btn" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold text-xs border border-amber-500/30 transition flex items-center gap-2">
+              <i class="fa-solid fa-rotate-left"></i>
+              <span>استعادة الكتالوج الافتراضي الكامل</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="text-center py-4 text-xs text-slate-500 border-t border-slate-800">
+        BRAND STORE Electronics Catalog • نظام الإدارة المركزي v3.0
+      </footer>
+
+    </div>
+
+    <!-- ================= ADD / EDIT PRODUCT MODAL ================= -->
+    <div id="product-editor-modal" class="fixed inset-0 bg-black/80 z-50 hidden backdrop-blur-md flex justify-center items-center p-3 sm:p-5">
+      <div class="glass-panel w-full max-w-2xl rounded-3xl p-5 max-h-[92vh] overflow-y-auto border border-slate-700 shadow-2xl space-y-4">
+        
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </div>
+            <h3 id="product-editor-title" class="font-black text-white text-base">إضافة جهاز جديد للكتالوج</h3>
+          </div>
+          <button id="close-product-editor-btn" class="w-8 h-8 rounded-xl bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <form id="product-editor-form" class="space-y-4 text-xs">
+          
+          <input type="hidden" id="edit-product-id" value="">
+
+          <!-- Title Arabic & English -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">اسم الجهاز (عربي) *</label>
+              <input type="text" id="form-product-title" required placeholder="مثال: آيفون 16 برو ماكس 256GB" class="w-full glass-input p-2.5 rounded-xl font-bold">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">اسم الجهاز بالإنجليزي / الموديل</label>
+              <input type="text" id="form-product-title-en" placeholder="iPhone 16 Pro Max 256GB" class="w-full glass-input p-2.5 rounded-xl">
+            </div>
+          </div>
+
+          <!-- Category & Brand -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">القسم / التصنيف *</label>
+              <select id="form-product-category" required class="w-full glass-input p-2.5 rounded-xl font-bold">
+                <option value="phones">الهواتف المحمولة</option>
+                <option value="laptops">حواسيب ولابتوبات</option>
+                <option value="tablets">أجهزة لوحية وآيباد</option>
+                <option value="audio">سماعات وصوتيات</option>
+                <option value="gaming">أجهزة ألعاب وكونسول</option>
+                <option value="monitors">شاشات قيمنق</option>
+                <option value="accessories">ملحقات وشواحن</option>
+                <option value="chairs">كراسي وطاولات</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">العلامة التجارية (الماركة) *</label>
+              <input type="text" id="form-product-brand" required placeholder="Apple, Samsung, Sony, Lenovo..." class="w-full glass-input p-2.5 rounded-xl font-bold">
+            </div>
+          </div>
+
+          <!-- Price & Old Price -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">السعر المعتمد بالدينار العراقي (د.ع) *</label>
+              <input type="number" id="form-product-price" required min="1000" step="1000" placeholder="1580000" class="w-full glass-input p-2.5 rounded-xl font-black text-amber-400">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">السعر السابق (اختياري - لإظهار الخصم)</label>
+              <input type="number" id="form-product-old-price" min="0" step="1000" placeholder="1720000" class="w-full glass-input p-2.5 rounded-xl">
+            </div>
+          </div>
+
+          <!-- Tag & Warranty -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">شارة خاصة (Badge) أو نص الخصم</label>
+              <input type="text" id="form-product-badge" placeholder="الأكثر طلباً، جديد 2026، تخفيض خاص..." class="w-full glass-input p-2.5 rounded-xl">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">الضمان المعتمد</label>
+              <input type="text" id="form-product-warranty" placeholder="ضمان وكالة رسمي لمدة سنة" value="ضمان وكالة رسمي لمدة سنة" class="w-full glass-input p-2.5 rounded-xl">
+            </div>
+          </div>
+
+          <!-- Image URL -->
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">رابط صورة الجهاز (Image URL) *</label>
+            <input type="url" id="form-product-image" required placeholder="https://images.unsplash.com/..." class="w-full glass-input p-2.5 rounded-xl font-mono text-[11px]">
+          </div>
+
+          <!-- Technical Specs Key/Values -->
+          <div class="space-y-2 pt-2 border-t border-slate-800">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-300">المواصفات التقنية (Specs):</span>
+              <button type="button" id="add-spec-row-btn" class="px-2.5 py-1 rounded-lg bg-indigo-600/30 hover:bg-indigo-600 text-indigo-300 hover:text-white text-[11px] font-bold transition">
+                + إضافة سطر مواصفة
+              </button>
+            </div>
+            <div id="specs-editor-container" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+              <!-- Dynamically populated spec rows -->
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="border-t border-slate-800 pt-3 flex items-center justify-end gap-2">
+            <button type="button" id="cancel-product-editor-btn" class="px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 font-bold text-xs hover:bg-slate-700 transition">
+              إلغاء
+            </button>
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs transition shadow-lg shadow-amber-500/20">
+              حفظ وتحديث الكتالوج
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+    <!-- ================= ADD REEL MODAL ================= -->
+    <div id="reel-editor-modal" class="fixed inset-0 bg-black/80 z-50 hidden backdrop-blur-md flex justify-center items-center p-3 sm:p-5">
+      <div class="glass-panel w-full max-w-md rounded-3xl p-5 border border-slate-700 shadow-2xl space-y-4">
+        
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <h3 class="font-black text-white text-base">إضافة ريل استعراض جديد</h3>
+          <button id="close-reel-editor-btn" class="w-8 h-8 rounded-xl bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <form id="reel-editor-form" class="space-y-3 text-xs">
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">عنوان الفيديو *</label>
+            <input type="text" id="form-reel-title" required placeholder="استعراض ميزات الجهاز..." class="w-full glass-input p-2.5 rounded-xl font-bold">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">رابط صورة الغلاف (Thumbnail) *</label>
+            <input type="url" id="form-reel-thumb" required placeholder="https://..." class="w-full glass-input p-2.5 rounded-xl font-mono text-[11px]">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">رابط الفيديو (MP4) أو معاينة</label>
+            <input type="url" id="form-reel-video" placeholder="https://..." class="w-full glass-input p-2.5 rounded-xl font-mono text-[11px]">
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">عدد المشاهدات التقريبي</label>
+              <input type="text" id="form-reel-views" placeholder="2.5K" value="1.2K" class="w-full glass-input p-2.5 rounded-xl font-bold">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">القسم</label>
+              <select id="form-reel-category" class="w-full glass-input p-2.5 rounded-xl font-bold">
+                <option value="phones">هواتف</option>
+                <option value="laptops">حواسيب</option>
+                <option value="gaming">ألعاب</option>
+                <option value="audio">صوتيات</option>
+                <option value="accessories">ملحقات</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-800 pt-3 flex justify-end gap-2">
+            <button type="button" id="cancel-reel-editor-btn" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 font-bold text-xs hover:bg-slate-700">إلغاء</button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs shadow-md">حفظ الريل</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- Admin Toast Notification -->
+    <div id="admin-toast-box" class="fixed top-12 left-1/2 -translate-x-1/2 glass-panel text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-2xl z-50 transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2 border border-slate-700">
+      <span class="text-amber-400"><i class="fa-solid fa-circle-check"></i></span>
+      <span id="admin-toast-text">تمت العملية بنجاح</span>
+    </div>
+
+    <!-- Admin Application Script Module -->
+    <script type="module" src="/src/admin.ts"></script>
+  </body>
+</html>

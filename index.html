@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>BRAND STORE | معرض وكتالوج الإلكترونيات المعتمد</title>
+    <meta name="description" content="كتالوج إلكتروني تفاعلي لعرض أحدث الهواتف، الحواسيب، السماعات والأجهزة الإلكترونية بالدينار العراقي لدى شركة BRAND STORE." />
+    <meta property="og:title" content="BRAND STORE | معرض وكتالوج الإلكترونيات المعتمد" />
+    <meta property="og:description" content="تصفح مواصفات وأسعار أحدث الأجهزة بالدينار العراقي - كتالوج للعرض فقط بدون شراء." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts: Cairo & Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Main Style Sheet -->
+    <link rel="stylesheet" href="/styles/main.css">
+  </head>
+  <body class="bg-[#090D16] text-slate-100 min-h-screen selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Glow Effect -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-44 bg-gradient-to-b from-indigo-600/15 via-purple-600/10 to-transparent pointer-events-none blur-3xl z-0"></div>
+
+    <!-- Main Application Container (Responsive: max-w-5xl centered) -->
+    <div id="app" class="relative z-10 max-w-5xl mx-auto min-h-screen flex flex-col justify-between pb-28">
+
+      <!-- ================= TOP HEADER ================= -->
+      <header class="sticky top-0 z-40 glass-nav px-4 py-3 border-b border-slate-800/80 mb-2">
+        <div class="flex items-center justify-between gap-3">
+          
+          <!-- Logo & Brand Identity -->
+          <div class="flex items-center gap-3 cursor-pointer" id="header-logo-btn">
+            <div class="relative w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 via-amber-400 to-yellow-300 p-0.5 shadow-lg shadow-amber-500/20 rotate-1">
+              <div class="w-full h-full bg-[#0F172A] rounded-[14px] flex items-center justify-center">
+                <span class="font-black text-amber-400 text-xl tracking-tighter">B</span>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-black text-base sm:text-lg tracking-wider text-white">BRAND STORE</span>
+                <span class="hidden sm:inline-block bg-amber-400/10 text-amber-400 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-amber-400/30">
+                  عرض فقط
+                </span>
+              </div>
+              <p class="text-[10px] text-slate-400 font-semibold flex items-center gap-1">
+                <span>معرض الإلكترونيات الفاخرة</span>
+                <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-emerald-400 text-[9px]">المعرض مفتوح</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Header Actions -->
+          <div class="flex items-center gap-2">
+            <!-- Filter Drawer Trigger Button with active badge counter -->
+            <button id="toggle-filter-btn" class="relative flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-xs font-bold text-slate-200 transition">
+              <i class="fa-solid fa-sliders text-indigo-400"></i>
+              <span class="hidden sm:inline">فلترة وترتيب</span>
+              <span id="active-filter-count" class="hidden w-5 h-5 bg-indigo-600 text-white rounded-full text-[10px] font-bold flex items-center justify-center">0</span>
+            </button>
+
+            <!-- Admin Link Button -->
+            <a href="/admin.html" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500/10 to-amber-600/20 hover:from-amber-500/20 hover:to-amber-600/30 border border-amber-500/30 text-amber-400 text-xs font-bold transition">
+              <i class="fa-solid fa-lock text-[11px]"></i>
+              <span class="hidden sm:inline">لوحة الأدمن</span>
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Search Input Bar & Catalog Mode Badge -->
+        <div class="mt-3 flex items-center gap-2">
+          <div class="relative flex-1">
+            <input 
+              type="text" 
+              id="search-input" 
+              placeholder="ابحث عن هاتف، لابتوب، سماعة، ماركة، أو معالج..." 
+              class="w-full glass-input text-xs sm:text-sm rounded-xl py-2.5 pr-10 pl-9 placeholder:text-slate-500"
+            />
+            <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-3.5 text-slate-400 text-sm"></i>
+            <button id="clear-search-btn" class="hidden absolute left-3 top-3 text-slate-400 hover:text-white">
+              <i class="fa-solid fa-circle-xmark text-sm"></i>
+            </button>
+          </div>
+          <!-- Fast Category Dropdown on wide screens -->
+          <button id="quick-sort-btn" class="sm:flex hidden items-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800/80 border border-slate-700 text-xs font-bold text-slate-300 hover:bg-slate-700 transition">
+            <i class="fa-solid fa-arrow-down-short-wide text-indigo-400"></i>
+            <span id="current-sort-label">الأحدث</span>
+          </button>
+        </div>
+
+        <!-- Catalog Mode Warning Banner (Strictly No Buying / Display Only) -->
+        <div class="mt-2.5 px-3 py-1.5 rounded-lg bg-indigo-950/40 border border-indigo-500/20 flex items-center justify-between text-[11px] text-indigo-200">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-info text-indigo-400"></i>
+            <span><strong>كتالوج رسمي للعرض:</strong> الأسعار بالدينار العراقي (د.ع) والمواصفات للاطلاع عليها قبل زيارة المعرض.</span>
+          </div>
+          <span class="hidden md:inline font-bold text-amber-400">بدون بيع أونلاين</span>
+        </div>
+      </header>
+
+      <!-- ================= MAIN VIEWPORT CONTENT ================= -->
+      <main class="flex-1 px-3 sm:px-4 space-y-5">
+
+        <!-- Active Filter Tags Container (populated by app.ts) -->
+        <div id="active-filter-chips" class="hidden flex-wrap items-center gap-2 pt-1"></div>
+
+        <!-- ================= PAGE 1: HOME CATALOG ================= -->
+        <section id="page-home" class="space-y-5">
+
+          <!-- Hero Promo Banner Carousel -->
+          <div class="relative rounded-3xl overflow-hidden border border-slate-800 bg-slate-900/80 shadow-2xl">
+            <div id="banner-slider" class="relative h-48 sm:h-56 bg-cover bg-center transition-all duration-700 flex flex-col justify-end p-5 sm:p-6" style="background-image: linear-gradient(to top, rgba(9, 13, 22, 0.95) 15%, rgba(9, 13, 22, 0.4) 60%, transparent 100%), url('https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=1200&q=80');">
+              <div class="space-y-1.5 max-w-xl">
+                <div class="flex items-center gap-2">
+                  <span class="bg-amber-500 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded-md uppercase tracking-wider">
+                    BRAND STORE EXCLUSIVE
+                  </span>
+                  <span class="text-slate-300 text-xs font-bold">معرض خريف 2026</span>
+                </div>
+                <h2 id="banner-headline" class="font-black text-lg sm:text-2xl text-white leading-tight">
+                  أقوى تشكيلة أجهزة قيمنق وحواسيب M3 معتمدة
+                </h2>
+                <p id="banner-subtitle" class="text-xs sm:text-sm text-slate-300 line-clamp-2">
+                  استعرض أحدث المواصفات التقنية والأسعار الرسمية بالدينار العراقي بدقة واحترافية.
+                </p>
+              </div>
+            </div>
+            <!-- Slide Dots -->
+            <div class="absolute bottom-3 left-4 flex items-center gap-1.5" id="banner-dots">
+              <button class="w-6 h-1.5 rounded-full bg-amber-400"></button>
+              <button class="w-2 h-1.5 rounded-full bg-slate-600"></button>
+              <button class="w-2 h-1.5 rounded-full bg-slate-600"></button>
+            </div>
+          </div>
+
+          <!-- Quick Horizontal Categories Carousel -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between px-1">
+              <h3 class="font-extrabold text-sm text-slate-200 flex items-center gap-2">
+                <i class="fa-solid fa-shapes text-indigo-400"></i>
+                <span>الأقسام الرئيسية</span>
+              </h3>
+              <button onclick="window.switchTab('categories')" class="text-xs font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 transition">
+                <span>عرض الكل</span>
+                <i class="fa-solid fa-chevron-left text-[10px]"></i>
+              </button>
+            </div>
+            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1" id="quick-category-pills">
+              <!-- Rendered via app.ts -->
+            </div>
+          </div>
+
+          <!-- Catalog Toolbar: Results Counter + Quick Sort Options -->
+          <div class="flex items-center justify-between px-1 pt-1 border-t border-slate-800/80">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-slate-400">الأجهزة المعروضة:</span>
+              <span id="products-count-badge" class="bg-slate-800 text-amber-400 font-extrabold text-xs px-2.5 py-0.5 rounded-full border border-slate-700">
+                0 جهاز
+              </span>
+            </div>
+
+            <!-- Sorting Selector -->
+            <div class="flex items-center gap-2">
+              <label for="catalog-sort" class="text-xs text-slate-400 font-medium hidden sm:inline">الترتيب حسب:</label>
+              <select id="catalog-sort" class="glass-input text-xs font-bold py-1.5 px-3 rounded-xl cursor-pointer">
+                <option value="newest">الأحدث وصولاً ⚡</option>
+                <option value="price-asc">السعر: من الأقل إلى الأعلى ⬆️</option>
+                <option value="price-desc">السعر: من الأعلى إلى الأقل ⬇️</option>
+                <option value="popular">الأكثر طلباً والمميزة ⭐</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Products Catalog Grid (2 columns on mobile, 3-4 on desktop) -->
+          <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+            <!-- Dynamic Items rendered by app.ts -->
+          </div>
+
+          <!-- Showroom Information Glass Banner -->
+          <div class="glass-panel rounded-3xl p-5 border border-indigo-500/20 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 my-4">
+            <div class="flex items-center gap-4 text-right">
+              <div class="w-12 h-12 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl flex-shrink-0">
+                <i class="fa-solid fa-building-columns"></i>
+              </div>
+              <div>
+                <h4 class="font-extrabold text-white text-sm sm:text-base">معرض BRAND STORE للإلكترونيات</h4>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  جميع الأسعار بالدينار العراقي (د.ع) ومحدّثة يومياً. تفضل بزيارتنا لفحص وتجربة الأجهزة واستلام الضمان الرسمي.
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 w-full md:w-auto">
+              <button onclick="window.switchTab('more')" class="w-full md:w-auto px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>موقع المعرض وأوقات الدوام</span>
+              </button>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ================= PAGE 2: CATEGORIES (الأصناف) ================= -->
+        <section id="page-categories" class="space-y-4 hidden">
+          <div class="glass-panel p-4 rounded-3xl text-center">
+            <h2 class="font-black text-white text-base sm:text-lg">تصفح أصناف الإلكترونيات</h2>
+            <p class="text-xs text-slate-400 mt-1">اختر الصنف المطلوب لعرض الأجهزة المتوفرة بمواصفاتها الدقيقة</p>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" id="categories-full-grid">
+            <!-- Populated via app.ts -->
+          </div>
+        </section>
+
+        <!-- ================= PAGE 3: BRANDS (الماركات) ================= -->
+        <section id="page-brands" class="space-y-4 hidden">
+          <div class="glass-panel p-4 rounded-3xl text-center">
+            <h2 class="font-black text-white text-base sm:text-lg">العلامات التجارية والوكالات المعتمدة</h2>
+            <p class="text-xs text-slate-400 mt-1">اضغط على أي ماركة لتصفية الأجهزة الخاصة بها فوراً مع الضمان</p>
+          </div>
+
+          <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3" id="brands-full-grid">
+            <!-- Populated via app.ts -->
+          </div>
+        </section>
+
+        <!-- ================= PAGE 4: DISCOVER / REELS (اكتشف) ================= -->
+        <section id="page-discover" class="space-y-4 hidden">
+          <div class="glass-panel p-4 rounded-3xl flex items-center justify-between">
+            <div>
+              <h2 class="font-black text-white text-base sm:text-lg flex items-center gap-2">
+                <span class="text-rose-500"><i class="fa-solid fa-play"></i></span>
+                <span>اكتشف ريلز BRAND STORE</span>
+              </h2>
+              <p class="text-xs text-slate-400 mt-0.5">فيديوهات سريعة واستعراض للأجهزة والميزات الحصرية</p>
+            </div>
+            <span class="bg-rose-500/10 text-rose-400 text-[10px] font-black px-2.5 py-1 rounded-full border border-rose-500/30">
+              استعراض حي 🎬
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" id="reels-catalog-grid">
+            <!-- Populated via app.ts -->
+          </div>
+        </section>
+
+        <!-- ================= PAGE 5: MORE / SHOWROOM (المزيد والمعرض) ================= -->
+        <section id="page-more" class="space-y-4 hidden">
+          
+          <!-- Store Profile Card -->
+          <div class="glass-panel p-5 rounded-3xl flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-slate-950 font-black text-2xl shadow-lg shadow-amber-500/20">
+                B
+              </div>
+              <div>
+                <h3 class="font-black text-white text-base">BRAND STORE ELECTRONICS</h3>
+                <p class="text-xs text-amber-400 font-bold mt-0.5">شركة براند ستور للأجهزة الإلكترونية</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">كتالوج العرض الرسمي والمواصفات المعتمدة</p>
+              </div>
+            </div>
+            <a href="/admin.html" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold text-xs border border-amber-500/30 flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-gear"></i>
+              <span>لوحة التحكم</span>
+            </a>
+          </div>
+
+          <!-- Showroom Location & Schedule -->
+          <div class="glass-card p-4 rounded-2xl space-y-3">
+            <h4 class="font-bold text-sm text-slate-200 flex items-center gap-2">
+              <i class="fa-solid fa-map-location-dot text-indigo-400"></i>
+              <span>مقر المعرض وصالة الاستعراض</span>
+            </h4>
+            <div class="space-y-2 text-xs text-slate-300">
+              <div class="flex items-start gap-2">
+                <i class="fa-solid fa-location-pin text-amber-400 mt-1"></i>
+                <div>
+                  <p class="font-bold text-white">العراق - بغداد</p>
+                  <p class="text-slate-400">صالة عرض BRAND STORE الرئيسية للأجهزة الإلكترونية وملحقاتها</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-2">
+                <i class="fa-solid fa-clock text-amber-400 mt-1"></i>
+                <div>
+                  <p class="font-bold text-white">أوقات الدوام الرسمي</p>
+                  <p class="text-slate-400">يومياً من الساعة 10:00 صباحاً حتى الساعة 11:00 مساءً (الجمعة من 4:00 عصراً)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Catalog Nature & Policies -->
+          <div class="glass-card p-4 rounded-2xl space-y-3">
+            <h4 class="font-bold text-sm text-slate-200 flex items-center gap-2">
+              <i class="fa-solid fa-shield-check text-emerald-400"></i>
+              <span>سياسة الكتالوج والضمان</span>
+            </h4>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+              <div class="p-3 rounded-xl bg-slate-800/60 border border-slate-700/50">
+                <i class="fa-solid fa-award text-amber-400 text-lg mb-1 block"></i>
+                <span class="font-bold text-slate-200">ضمان وكالة رسمي</span>
+                <p class="text-[10px] text-slate-400 mt-0.5">جميع الأجهزة مضمونة</p>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-800/60 border border-slate-700/50">
+                <i class="fa-solid fa-money-bill-wave text-emerald-400 text-lg mb-1 block"></i>
+                <span class="font-bold text-slate-200">دينار عراقي (د.ع)</span>
+                <p class="text-[10px] text-slate-400 mt-0.5">أسعار شفافة ومحدثة</p>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-800/60 border border-slate-700/50">
+                <i class="fa-solid fa-microchip text-indigo-400 text-lg mb-1 block"></i>
+                <span class="font-bold text-slate-200">مواصفات دقيقة</span>
+                <p class="text-[10px] text-slate-400 mt-0.5">فحص كامل للعتاد</p>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-800/60 border border-slate-700/50">
+                <i class="fa-solid fa-eye text-purple-400 text-lg mb-1 block"></i>
+                <span class="font-bold text-slate-200">للعرض فقط</span>
+                <p class="text-[10px] text-slate-400 mt-0.5">بدون سلة أو شراء أونلاين</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Direct Admin Entry Button -->
+          <div class="pt-2">
+            <a href="/admin.html" class="w-full block text-center glass-panel p-4 rounded-2xl border border-amber-500/30 hover:border-amber-400 transition group">
+              <div class="flex items-center justify-center gap-2 text-amber-400 font-extrabold text-sm">
+                <i class="fa-solid fa-user-shield text-base group-hover:scale-110 transition"></i>
+                <span>تسجيل الدخول إلى لوحة تحكم الأدمن (Admin Panel)</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">خاص بإدارة المنتجات والريلز وتحديث الأسعار والمواصفات</p>
+            </a>
+          </div>
+
+          <div class="text-center py-3 text-slate-500 text-xs">
+            BRAND STORE © 2026 • جميع الحقوق محفوظة
+          </div>
+
+        </section>
+
+      </main>
+
+      <!-- ================= FLOATING BOTTOM NAVIGATION DOCK ================= -->
+      <nav class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[94%] max-w-lg glass-nav rounded-2xl border border-slate-700/60 p-1.5 z-40 flex items-center justify-around shadow-2xl">
+        
+        <!-- Home -->
+        <button onclick="window.switchTab('home')" id="nav-home" class="nav-btn active flex flex-col sm:flex-row items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl transition-all text-amber-400 bg-amber-400/10">
+          <i class="fa-solid fa-house text-sm"></i>
+          <span>الرئيسية</span>
+        </button>
+
+        <!-- Categories -->
+        <button onclick="window.switchTab('categories')" id="nav-categories" class="nav-btn flex flex-col sm:flex-row items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl transition-all text-slate-400 hover:text-white">
+          <i class="fa-solid fa-shapes text-sm"></i>
+          <span>الأصناف</span>
+        </button>
+
+        <!-- Brands -->
+        <button onclick="window.switchTab('brands')" id="nav-brands" class="nav-btn flex flex-col sm:flex-row items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl transition-all text-slate-400 hover:text-white">
+          <i class="fa-solid fa-layer-group text-sm"></i>
+          <span>الماركات</span>
+        </button>
+
+        <!-- Discover Reels -->
+        <button onclick="window.switchTab('discover')" id="nav-discover" class="nav-btn flex flex-col sm:flex-row items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl transition-all text-slate-400 hover:text-white">
+          <i class="fa-solid fa-play text-sm"></i>
+          <span>اكتشف</span>
+        </button>
+
+        <!-- More -->
+        <button onclick="window.switchTab('more')" id="nav-more" class="nav-btn flex flex-col sm:flex-row items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl transition-all text-slate-400 hover:text-white">
+          <i class="fa-solid fa-ellipsis text-sm"></i>
+          <span>المزيد</span>
+        </button>
+
+      </nav>
+
+    </div>
+
+    <!-- ================= FILTER & SORTING MODAL / DRAWER ================= -->
+    <div id="filter-modal" class="fixed inset-0 bg-black/75 z-50 hidden backdrop-blur-md flex justify-center items-end sm:items-center p-0 sm:p-4 transition-all">
+      <div class="glass-panel w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5 max-h-[88vh] flex flex-col justify-between border border-slate-700 shadow-2xl">
+        
+        <div>
+          <!-- Header -->
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center font-bold">
+                <i class="fa-solid fa-sliders"></i>
+              </div>
+              <h3 class="font-black text-white text-base">فلترة وتخصيص الكتالوج</h3>
+            </div>
+            <button id="close-filter-btn" class="w-8 h-8 rounded-xl bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <div class="space-y-4 overflow-y-auto max-h-[60vh] pr-1">
+            
+            <!-- 1. Category Filter -->
+            <div class="space-y-2">
+              <label class="block font-bold text-xs text-slate-300">القسم / التصنيف:</label>
+              <select id="filter-category-select" class="w-full glass-input p-2.5 rounded-xl text-xs font-bold">
+                <option value="all">جميع الأقسام (الكل)</option>
+                <option value="phones">📱 الهواتف المحمولة</option>
+                <option value="laptops">💻 حواسيب ولابتوبات</option>
+                <option value="tablets">📲 أجهزة لوحية وآيباد</option>
+                <option value="audio">🎧 سماعات وصوتيات</option>
+                <option value="gaming">🎮 أجهزة ألعاب وكونسول</option>
+                <option value="monitors">🖥️ شاشات قيمنق</option>
+                <option value="accessories">🔌 ملحقات وشواحن وماوس</option>
+                <option value="chairs">🪑 كراسي وطاولات قيمنق</option>
+              </select>
+            </div>
+
+            <!-- 2. Brand Filter -->
+            <div class="space-y-2">
+              <label class="block font-bold text-xs text-slate-300">العلامة التجارية (الماركة):</label>
+              <select id="filter-brand-select" class="w-full glass-input p-2.5 rounded-xl text-xs font-bold">
+                <option value="all">جميع الماركات المعتمدة</option>
+                <option value="Apple">Apple (آبل)</option>
+                <option value="Samsung">Samsung (سامسونج)</option>
+                <option value="Sony">Sony (سوني)</option>
+                <option value="Lenovo">Lenovo (لينوفو)</option>
+                <option value="Anker">Anker (أنكر)</option>
+                <option value="MSI">MSI (إم إس آي)</option>
+                <option value="Logitech">Logitech (لوجيتك)</option>
+                <option value="DXRacer">DXRacer (دي إكس ريسر)</option>
+                <option value="Xiaomi">Xiaomi (شاومي)</option>
+                <option value="JBL">JBL (جي بي إل)</option>
+                <option value="Momax">Momax (موماكس)</option>
+                <option value="Asus">Asus ROG (أسوس)</option>
+              </select>
+            </div>
+
+            <!-- 3. Price Range Slider / Inputs (IQD) -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-slate-300">نطاق السعر بالدينار العراقي (د.ع):</span>
+                <span id="price-range-indicator" class="text-amber-400 font-extrabold text-xs">0 - 3,500,000 د.ع</span>
+              </div>
+              
+              <!-- Quick Price Preset Chips -->
+              <div class="flex flex-wrap gap-1.5 pt-1" id="price-preset-chips">
+                <button data-min="0" data-max="3500000" class="price-chip px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-600 text-white">الكل</button>
+                <button data-min="0" data-max="100000" class="price-chip px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">أقل من 100 ألف</button>
+                <button data-min="100000" data-max="500000" class="price-chip px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">100k - 500k د.ع</button>
+                <button data-min="500000" data-max="1500000" class="price-chip px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">500k - 1.5M د.ع</button>
+                <button data-min="1500000" data-max="3500000" class="price-chip px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">أكثر من 1.5 مليون</button>
+              </div>
+
+              <!-- Min and Max Inputs -->
+              <div class="grid grid-cols-2 gap-2 pt-1">
+                <div>
+                  <span class="text-[10px] text-slate-400 block mb-1">الحد الأدنى (د.ع)</span>
+                  <input type="number" id="filter-min-price" value="0" min="0" step="10000" class="w-full glass-input p-2 rounded-xl text-xs font-bold">
+                </div>
+                <div>
+                  <span class="text-[10px] text-slate-400 block mb-1">الحد الأقصى (د.ع)</span>
+                  <input type="number" id="filter-max-price" value="3500000" min="0" step="10000" class="w-full glass-input p-2 rounded-xl text-xs font-bold">
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. Sorting Method -->
+            <div class="space-y-2">
+              <label class="block font-bold text-xs text-slate-300">طريقة الترتيب (Sorting):</label>
+              <div class="grid grid-cols-2 gap-2" id="filter-sort-options">
+                <button data-sort="newest" class="sort-chip p-2.5 rounded-xl text-xs font-bold border border-indigo-500/50 bg-indigo-600/30 text-white text-right flex items-center justify-between">
+                  <span>الأحدث وصولاً</span>
+                  <i class="fa-solid fa-clock"></i>
+                </button>
+                <button data-sort="price-asc" class="sort-chip p-2.5 rounded-xl text-xs font-bold border border-slate-700 bg-slate-800 text-slate-300 text-right flex items-center justify-between">
+                  <span>السعر: من الأقل للأعلى</span>
+                  <i class="fa-solid fa-arrow-up-1-9"></i>
+                </button>
+                <button data-sort="price-desc" class="sort-chip p-2.5 rounded-xl text-xs font-bold border border-slate-700 bg-slate-800 text-slate-300 text-right flex items-center justify-between">
+                  <span>السعر: من الأعلى للأقل</span>
+                  <i class="fa-solid fa-arrow-down-9-1"></i>
+                </button>
+                <button data-sort="popular" class="sort-chip p-2.5 rounded-xl text-xs font-bold border border-slate-700 bg-slate-800 text-slate-300 text-right flex items-center justify-between">
+                  <span>الأكثر طلباً / المميزة</span>
+                  <i class="fa-solid fa-fire"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Filter Actions -->
+        <div class="border-t border-slate-800 pt-3 mt-3 flex items-center gap-2">
+          <button id="apply-filters-btn" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-extrabold text-xs transition shadow-lg shadow-indigo-600/20">
+            تطبيق الفلترة والترتيب
+          </button>
+          <button id="reset-filters-btn" class="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition">
+            إعادة تعيين
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ================= PRODUCT FULL SPECS SHEET MODAL (للعرض فقط) ================= -->
+    <div id="product-modal" class="fixed inset-0 bg-black/80 z-50 hidden backdrop-blur-md flex justify-center items-center p-3 sm:p-5">
+      <div class="glass-panel w-full max-w-2xl rounded-3xl p-5 max-h-[92vh] overflow-y-auto border border-slate-700 shadow-2xl space-y-4">
+        
+        <!-- Header -->
+        <div class="flex items-start justify-between border-b border-slate-800 pb-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span id="modal-brand-badge" class="bg-indigo-600/20 text-indigo-400 font-black text-xs px-2.5 py-0.5 rounded-md border border-indigo-500/30">Brand</span>
+              <span id="modal-tag-badge" class="bg-amber-400/20 text-amber-400 font-bold text-xs px-2.5 py-0.5 rounded-md border border-amber-400/30">جديد</span>
+              <span class="text-xs text-slate-400">بطاقة مواصفات الجهاز الرسمية</span>
+            </div>
+            <h2 id="modal-title" class="font-black text-lg sm:text-xl text-white mt-1 leading-snug">اسم المنتج</h2>
+            <p id="modal-title-en" class="text-xs text-slate-400 font-mono"></p>
+          </div>
+          <button id="close-product-modal-btn" class="w-9 h-9 rounded-xl bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+
+        <!-- Product Image & Price Card -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+          <!-- Main Image -->
+          <div class="h-60 rounded-2xl bg-slate-900/90 border border-slate-800 p-3 flex items-center justify-center relative overflow-hidden group">
+            <img id="modal-image" src="" alt="Device" class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-500">
+            <span class="absolute top-2 right-2 bg-emerald-500/20 text-emerald-400 text-[10px] font-black px-2 py-0.5 rounded-md border border-emerald-500/30">
+              متوفر بصالة العرض ✅
+            </span>
+          </div>
+
+          <!-- Price & Showroom Details -->
+          <div class="space-y-3">
+            <div class="p-3.5 rounded-2xl bg-slate-800/60 border border-slate-700/60 space-y-1">
+              <span class="text-[11px] text-slate-400 font-bold block">السعر المعتمد في المعرض:</span>
+              <div class="flex items-baseline gap-2 flex-wrap">
+                <span id="modal-price" class="text-2xl font-black text-amber-400">0 د.ع</span>
+                <span id="modal-old-price" class="text-xs text-slate-400 line-through font-bold"></span>
+              </div>
+              <span id="modal-discount" class="inline-block text-[10px] font-extrabold text-emerald-400"></span>
+            </div>
+
+            <!-- Warranty & Showroom Notice -->
+            <div class="p-3 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 space-y-1 text-xs">
+              <div class="flex items-center gap-2 text-indigo-300 font-bold">
+                <i class="fa-solid fa-certificate text-indigo-400"></i>
+                <span id="modal-warranty">ضمان وكالة رسمي سنة كاملة</span>
+              </div>
+              <div class="flex items-center gap-2 text-slate-400 text-[11px]">
+                <i class="fa-solid fa-building-circle-check text-amber-400"></i>
+                <span id="modal-location">صالة العرض الرئيسية - BRAND STORE</span>
+              </div>
+            </div>
+
+            <!-- Strict Catalog Notice (No Buy Buttons) -->
+            <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-[11px] text-slate-400 text-center">
+              <span class="font-bold text-amber-400">⚠️ تنبيه:</span> هذا الكتالوج مخصص للاطلاع على المواصفات والأسعار فقط. يمكنك فحص الجهاز وتجربته مباشرة داخل المعرض.
+            </div>
+          </div>
+        </div>
+
+        <!-- Full Technical Specifications Table -->
+        <div class="space-y-2 pt-2">
+          <h4 class="font-extrabold text-sm text-slate-200 flex items-center gap-2">
+            <i class="fa-solid fa-microchip text-indigo-400"></i>
+            <span>المواصفات التقنية الكاملة (Full Specifications):</span>
+          </h4>
+          <div id="modal-specs-table" class="space-y-1.5 rounded-2xl bg-slate-900/80 p-3 border border-slate-800 text-xs">
+            <!-- Dynamically populated key/values -->
+          </div>
+        </div>
+
+        <div class="border-t border-slate-800 pt-3 flex justify-end">
+          <button id="modal-done-btn" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs transition">
+            إغلاق البطاقة
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ================= REEL VIDEO PREVIEW MODAL ================= -->
+    <div id="reel-modal" class="fixed inset-0 bg-black/90 z-50 hidden backdrop-blur-md flex justify-center items-center p-3">
+      <div class="glass-panel w-full max-w-sm rounded-3xl overflow-hidden border border-slate-700 shadow-2xl flex flex-col">
+        <!-- Reel Header -->
+        <div class="flex items-center justify-between p-3 border-b border-slate-800">
+          <span class="text-xs font-black text-rose-400 flex items-center gap-1.5">
+            <i class="fa-solid fa-play"></i>
+            <span id="reel-title-preview">استعراض الجهاز</span>
+          </span>
+          <button id="close-reel-btn" class="w-7 h-7 rounded-lg bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <!-- Video Player -->
+        <div class="relative h-96 bg-black flex items-center justify-center">
+          <video id="reel-video-element" class="w-full h-full object-cover" controls autoplay loop playsinline>
+            <source src="" type="video/mp4">
+            متصفحك لا يدعم تشغيل الفيديو.
+          </video>
+        </div>
+
+        <!-- Reel Footer & Associated Product Link -->
+        <div class="p-3 bg-slate-900 border-t border-slate-800 flex items-center justify-between gap-2">
+          <div>
+            <span class="text-[10px] text-slate-400 block" id="reel-views-preview">مشاهدات 0</span>
+            <span class="text-xs font-bold text-white truncate max-w-[180px] block" id="reel-product-name">اسم الجهاز</span>
+          </div>
+          <button id="reel-view-product-btn" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition flex items-center gap-1.5">
+            <i class="fa-solid fa-eye"></i>
+            <span>عرض المواصفات</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= TOAST NOTIFICATION ================= -->
+    <div id="toast-box" class="fixed top-14 left-1/2 -translate-x-1/2 glass-panel text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-2xl z-50 transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2 border border-slate-700">
+      <span id="toast-icon" class="text-amber-400"><i class="fa-solid fa-circle-check"></i></span>
+      <span id="toast-text">تمت العملية بنجاح</span>
+    </div>
+
+    <!-- Application Script Module -->
+    <script type="module" src="/src/app.ts"></script>
+  </body>
+</html>

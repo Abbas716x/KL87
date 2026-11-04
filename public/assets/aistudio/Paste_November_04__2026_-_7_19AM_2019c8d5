@@ -1,0 +1,1019 @@
+
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>متجر الكرادة للإلكترونيات | KARADA STORE</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cairo & Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            gold: '#F2A900',
+                            orange: '#E86C00',
+                            purple: '#6C5CE7',
+                            darkPurple: '#4834D4',
+                            bgLight: '#FAF9FE',
+                            cardBg: '#FFFFFF'
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        tajawal: ['Tajawal', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', 'Tajawal', sans-serif;
+            background-color: #f1f2f6;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom Scrollbar hiding for clean app experience */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background-color: #FAF9FE;
+            position: relative;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .floating-nav {
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.18);
+            backdrop-filter: blur(12px);
+        }
+        .badge-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .85; transform: scale(1.08); }
+        }
+    </style>
+</head>
+<body class="bg-slate-200">
+
+    <!-- Mobile Shell Container -->
+    <div class="app-container flex flex-col justify-between overflow-x-hidden min-h-screen pb-28">
+
+        <!-- Top Header Sticky -->
+        <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md px-4 pt-3 pb-2 border-b border-purple-50/50">
+            <div class="flex items-center justify-between">
+                <!-- Right Side Actions: Cart & Notifications -->
+                <div class="flex items-center gap-2">
+                    <button onclick="openCart()" class="relative w-10 h-10 bg-slate-100/80 hover:bg-purple-50 rounded-full flex items-center justify-center text-slate-700 transition">
+                        <i class="fa-solid fa-cart-shopping text-base"></i>
+                        <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white hidden">0</span>
+                    </button>
+                    <button onclick="showToast('لا توجد إشعارات جديدة حالياً')" class="w-10 h-10 bg-slate-100/80 hover:bg-purple-50 rounded-full flex items-center justify-center text-slate-700 transition">
+                        <i class="fa-regular fa-bell text-base"></i>
+                    </button>
+                </div>
+
+                <!-- Center Logo -->
+                <div class="flex items-center gap-2 cursor-pointer" onclick="switchTab('home')">
+                    <div class="text-right">
+                        <div class="flex items-center gap-1 font-extrabold text-sm tracking-tight text-slate-800">
+                            <span class="text-amber-500 text-base">K</span> KARADA STORE
+                        </div>
+                        <p class="text-[9px] font-semibold text-purple-700 -mt-1">متجر الكرادة للإلكترونيات</p>
+                    </div>
+                    <!-- Karada Stylized Logo Icon -->
+                    <div class="w-9 h-9 bg-gradient-to-tr from-amber-500 to-amber-400 rounded-lg flex items-center justify-center text-white font-black text-xl shadow-sm rotate-3">
+                        K
+                    </div>
+                </div>
+
+                <!-- Left User Profile Avatar -->
+                <button onclick="switchTab('more')" class="w-10 h-10 bg-amber-50 rounded-full border border-amber-200 flex items-center justify-center text-amber-600">
+                    <i class="fa-solid fa-user-tie text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Search Bar Field -->
+            <div class="mt-3 relative">
+                <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="ابحث عن ايفون، شاحن، لابتوب..." class="w-full bg-slate-100/90 text-slate-800 text-xs rounded-full py-2.5 pr-4 pl-10 border border-transparent focus:border-purple-300 focus:bg-white focus:outline-none transition">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+            </div>
+        </header>
+
+
+        <!-- MAIN VIEWPORT CONTAINER -->
+        <main id="app-viewport" class="px-3 pt-3 flex-1">
+
+            <!-- ================= PAGE 1: HOME (الرئيسية) ================= -->
+            <section id="page-home" class="space-y-4">
+                
+                <!-- Main Promo Banners Slider -->
+                <div class="relative rounded-2xl overflow-hidden bg-slate-900 shadow-sm border border-slate-100">
+                    <div id="banner-slide" class="h-44 bg-cover bg-center transition-all duration-500 flex flex-col justify-end p-4 text-white relative" style="background-image: linear-gradient(to top, rgba(0,0,0,0.85), transparent), url('https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=800&q=80');">
+                        <span class="bg-amber-500 text-slate-900 text-[10px] font-extrabold px-2 py-0.5 rounded-md w-fit mb-1">قسطه شهرياً Q</span>
+                        <h3 class="font-extrabold text-base leading-tight">كل ما تحتاجه من أجهزة وحواسيب ومعدات Gaming</h3>
+                        <p class="text-xs text-slate-200 mt-1">تخفيضات خاصة وحصرية لدى متجر الكرادة</p>
+                    </div>
+                </div>
+
+                <!-- Horizontal Quick Categories Carousel -->
+                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+                    <button onclick="filterCategory('all')" class="cat-pill bg-purple-600 text-white font-bold text-xs px-4 py-2 rounded-xl whitespace-nowrap shadow-sm">الكل 🛒</button>
+                    <button onclick="filterCategory('phones')" class="cat-pill bg-white text-slate-700 font-medium text-xs px-4 py-2 rounded-xl border border-slate-200/80 whitespace-nowrap">هواتف محمودة</button>
+                    <button onclick="filterCategory('laptops')" class="cat-pill bg-white text-slate-700 font-medium text-xs px-4 py-2 rounded-xl border border-slate-200/80 whitespace-nowrap">حواسيب ولابتوبات</button>
+                    <button onclick="filterCategory('audio')" class="cat-pill bg-white text-slate-700 font-medium text-xs px-4 py-2 rounded-xl border border-slate-200/80 whitespace-nowrap">سماعات وصوتيات</button>
+                    <button onclick="filterCategory('gaming')" class="cat-pill bg-white text-slate-700 font-medium text-xs px-4 py-2 rounded-xl border border-slate-200/80 whitespace-nowrap">أجهزة ألعاب</button>
+                </div>
+
+                <!-- Section Header: November Discounts 🔥 -->
+                <div class="flex justify-between items-center pt-2">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-lg">🔥🔥🔥</span>
+                        <h2 class="font-black text-slate-800 text-base">خصومات نوفمبر</h2>
+                    </div>
+                    <button onclick="switchTab('categories')" class="text-xs font-bold text-purple-600 hover:underline flex items-center gap-1">
+                        رؤية الجميع <i class="fa-solid fa-arrow-left text-[10px]"></i>
+                    </button>
+                </div>
+
+                <!-- Products Grid 2 Columns (Matching Screenshot 4 & 6) -->
+                <div id="home-products-grid" class="grid grid-cols-2 gap-3">
+                    <!-- Dynamic Items rendered by JS -->
+                </div>
+
+                <!-- Middle Promo Banner (Dashcam / Speakers) -->
+                <div class="rounded-2xl bg-gradient-to-r from-purple-900 to-indigo-900 p-4 text-white flex items-center justify-between shadow-sm my-2">
+                    <div>
+                        <span class="bg-purple-500/30 text-purple-200 text-[9px] font-bold px-2 py-0.5 rounded-full">قسطها شهرياً</span>
+                        <h4 class="font-black text-sm mt-1">DASHCAM كاميرا سيارة</h4>
+                        <p class="text-[11px] text-purple-200 mt-0.5">احمي قيادتك وأدواتك بذكاء</p>
+                    </div>
+                    <i class="fa-solid fa-camera-rotate text-3xl text-purple-300 opacity-80"></i>
+                </div>
+
+            </section>
+
+
+            <!-- ================= PAGE 2: CATEGORIES (الأصناف) ================= -->
+            <section id="page-categories" class="space-y-4 hidden">
+                <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center mb-3">
+                    <h2 class="font-extrabold text-slate-800 text-base">تصفح أصناف الإلكترونيات</h2>
+                    <p class="text-xs text-slate-500">اختر القسم لاستعراض أحدث المنتجات المتوفرة في المخزن</p>
+                </div>
+
+                <!-- Grid matching image 1 -->
+                <div class="grid grid-cols-2 gap-3">
+                    
+                    <!-- Cat 1 -->
+                    <div onclick="filterCategoryAndSwitch('phones')" class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between cursor-pointer hover:border-purple-300 transition group">
+                        <div>
+                            <h3 class="font-bold text-xs text-slate-800 group-hover:text-purple-600">الهواتف المحمولة</h3>
+                            <span class="text-[10px] text-slate-400">آيفون، سامسونج</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 text-xl">
+                            📱
+                        </div>
+                    </div>
+
+                    <!-- Cat 2 -->
+                    <div onclick="filterCategoryAndSwitch('tablets')" class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between cursor-pointer hover:border-purple-300 transition group">
+                        <div>
+                            <h3 class="font-bold text-xs text-slate-800 group-hover:text-purple-600">أجهزة لوحية</h3>
+                            <span class="text-[10px] text-slate-400">آيباد، تابلت</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 text-xl">
+                            📲
+                        </div>
+                    </div>
+
+                    <!-- Cat 3 -->
+                    <div onclick="filterCategoryAndSwitch('laptops')" class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between cursor-pointer hover:border-purple-300 transition group">
+                        <div>
+                            <h3 class="font-bold text-xs text-slate-800 group-hover:text-purple-600">حواسيب ولابتوبات</h3>
+                            <span class="text-[10px] text-slate-400">Gaming, Work</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 text-xl">
+                            💻
+                        </div>
+                    </div>
+
+                    <!-- Cat 4 -->
+                    <div onclick="filterCategoryAndSwitch('audio')" class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between cursor-pointer hover:border-purple-300 transition group">
+                        <div>
+                            <h3 class="font-bold text-xs text-slate-800 group-hover:text-purple-600">سماعات الرأس</h3>
+                            <span class="text-[10px] text-slate-400">Sony, JBL, Anker</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 text-xl">
+                            🎧
+                        </div>
+                    </div>
+
+                    <!-- Cat 5 -->
+                    <div onclick="filterCategoryAndSwitch('gaming')" class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between cursor-pointer hover:border-purple-300 transition group">
+                        <div>
+                            <h3 class="font-bold text-xs text-slate-800 group-hover:text-purple-600">أجهزة ألعاب</h3>
+                            <span class="text-[10px] text-slate-400">PlayStation, Switch</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-red-600 text-xl">
+                            🎮
+                        </div>
+                    </div>
+
+                    <!-- Cat 6 -->
+                    <div onclick="filterCategoryAndSwitch('chairs')" class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between cursor-pointer hover:border-purple-300 transition group">
+                        <div>
+                            <h3 class="font-bold text-xs text-slate-800 group-hover:text-purple-600">كراسي وطاولات</h3>
+                            <span class="text-[10px] text-slate-400">DXRacer, Furgle</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 text-xl">
+                            🪑
+                        </div>
+                    </div>
+
+                    <!-- Cat 7 -->
+                    <div onclick="filterCategoryAndSwitch('accessories')" class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between cursor-pointer hover:border-purple-300 transition group">
+                        <div>
+                            <h3 class="font-bold text-xs text-slate-800 group-hover:text-purple-600">قلم ذكي وماوس</h3>
+                            <span class="text-[10px] text-slate-400">Apple Pencil, Logitech</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 text-xl">
+                            ✏️
+                        </div>
+                    </div>
+
+                    <!-- Cat 8 -->
+                    <div onclick="filterCategoryAndSwitch('monitors')" class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between cursor-pointer hover:border-purple-300 transition group">
+                        <div>
+                            <h3 class="font-bold text-xs text-slate-800 group-hover:text-purple-600">شاشات قيمنك</h3>
+                            <span class="text-[10px] text-slate-400">4K, 165Hz</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-pink-50 flex items-center justify-center text-pink-600 text-xl">
+                            🖥️
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+
+            <!-- ================= PAGE 3: BRANDS (الماركات) ================= -->
+            <section id="page-brands" class="space-y-4 hidden">
+                <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-center">
+                    <h2 class="font-extrabold text-slate-800 text-base">العلامات التجارية المعتمدة</h2>
+                    <p class="text-xs text-slate-500">تسوق حسب ماركتك المفضلة وضمان وكالة رسمي</p>
+                </div>
+
+                <!-- Grid Matching Screenshot 5 -->
+                <div class="grid grid-cols-4 gap-2.5" id="brands-grid">
+                    <!-- Generated via JS -->
+                </div>
+            </section>
+
+
+            <!-- ================= PAGE 4: DISCOVER / REELS (اكتشف) ================= -->
+            <section id="page-discover" class="space-y-3 hidden">
+                
+                <!-- Category Filter Pills matching Image 2 -->
+                <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+                    <button class="bg-purple-700 text-white text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
+                        <i class="fa-solid fa-grid-2"></i> الكل
+                    </button>
+                    <button class="bg-white text-slate-700 border border-slate-200 text-[11px] font-medium px-3 py-1.5 rounded-full whitespace-nowrap">الهواتف المحمولة</button>
+                    <button class="bg-white text-slate-700 border border-slate-200 text-[11px] font-medium px-3 py-1.5 rounded-full whitespace-nowrap">Mouse</button>
+                    <button class="bg-white text-slate-700 border border-slate-200 text-[11px] font-medium px-3 py-1.5 rounded-full whitespace-nowrap">أجهزة ألعاب</button>
+                </div>
+
+                <!-- Video Reels Vertical Grid matching Image 2 -->
+                <div class="grid grid-cols-3 gap-1.5" id="reels-grid">
+                    <!-- Video Cards populated via JS -->
+                </div>
+            </section>
+
+
+            <!-- ================= PAGE 5: MORE & PROFILE (المزيد / الحساب) ================= -->
+            <section id="page-more" class="space-y-4 hidden">
+                
+                <!-- Profile Header matching Image 3 -->
+                <div class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-14 h-14 bg-amber-100 border-2 border-amber-400 rounded-full flex items-center justify-center text-amber-600 text-2xl">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-800 text-sm">أنت غير مسجل حالياً</h3>
+                            <button onclick="showToast('يرجى مراسلتنا مباشرة عبر الواتساب للطلبات')" class="text-xs font-bold text-purple-600 hover:underline">تسجيل الدخول / حجز سريع</button>
+                        </div>
+                    </div>
+                    <button class="bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold px-3 py-1.5 rounded-full border border-slate-200">
+                        EN
+                    </button>
+                </div>
+
+                <!-- Section: My List -->
+                <div class="space-y-2">
+                    <p class="text-xs font-bold text-slate-500 px-1">قائمتي الخاصة</p>
+                    <div onclick="showToast('قائمة المفضلة فارغة')" class="bg-white p-3.5 rounded-2xl border border-slate-100 flex items-center justify-between cursor-pointer hover:bg-slate-50">
+                        <div class="flex items-center gap-3 text-slate-700 font-bold text-xs">
+                            <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-sm">
+                                <i class="fa-regular fa-heart"></i>
+                            </div>
+                            <span>المفضلة</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-left text-xs text-slate-300"></i>
+                    </div>
+                </div>
+
+                <!-- Section: Contact Us -->
+                <div class="space-y-2">
+                    <p class="text-xs font-bold text-slate-500 px-1">تواصل معنا</p>
+                    <a href="https://wa.me/9647800000000" target="_blank" class="bg-white p-3.5 rounded-2xl border border-slate-100 flex items-center justify-between cursor-pointer hover:bg-slate-50 block">
+                        <div class="flex items-center gap-3 text-slate-700 font-bold text-xs">
+                            <div class="w-8 h-8 rounded-xl bg-green-50 text-green-600 flex items-center justify-center text-sm">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <span>تواصل مع الدعم عبر الواتساب</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-left text-xs text-slate-300"></i>
+                    </a>
+                </div>
+
+                <!-- Section: Policies Grid -->
+                <div class="space-y-2">
+                    <p class="text-xs font-bold text-slate-500 px-1">سياسة التطبيق</p>
+                    <div class="grid grid-cols-4 gap-2 text-center">
+                        <div class="bg-white p-3 rounded-2xl border border-slate-100 flex flex-col items-center justify-center gap-1 shadow-sm">
+                            <div class="w-8 h-8 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center text-xs">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-slate-700">الخصوصية</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-2xl border border-slate-100 flex flex-col items-center justify-center gap-1 shadow-sm">
+                            <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xs">
+                                <i class="fa-solid fa-rotate-left"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-slate-700">الاسترجاع</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-2xl border border-slate-100 flex flex-col items-center justify-center gap-1 shadow-sm">
+                            <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
+                                <i class="fa-regular fa-credit-card"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-slate-700">الدفع</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-2xl border border-slate-100 flex flex-col items-center justify-center gap-1 shadow-sm">
+                            <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-xs">
+                                <i class="fa-solid fa-truck-fast"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-slate-700">التوصيل</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Switcher Drawer Trigger Button -->
+                <div class="pt-2">
+                    <button onclick="toggleAdminModal()" class="w-full bg-slate-900 text-amber-400 font-extrabold text-xs py-3 rounded-2xl shadow-md flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-sliders"></i>
+                        فتح لوحة تحكم الأدمن (إضافة/تعديل/حذف المنتجات)
+                    </button>
+                </div>
+
+                <div class="text-center pt-2 pb-4 text-slate-400 text-[11px]">
+                    الإصدار 2.4.0 • Karada Electronics Store
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- ================= FLOATING BOTTOM DOCK NAVIGATION ================= -->
+        <nav class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[92%] max-w-[440px] bg-white/95 backdrop-blur-md rounded-full border border-purple-100 p-1.5 floating-nav z-40 flex items-center justify-between px-3">
+            
+            <!-- Home Item -->
+            <button onclick="switchTab('home')" id="nav-home" class="nav-item flex items-center gap-1.5 text-purple-700 font-black text-xs bg-purple-50 px-3.5 py-2 rounded-full transition-all">
+                <i class="fa-solid fa-house text-sm"></i>
+                <span>الرئيسية</span>
+            </button>
+
+            <!-- Categories -->
+            <button onclick="switchTab('categories')" id="nav-categories" class="nav-item flex items-center gap-1.5 text-slate-400 font-bold text-xs hover:text-purple-600 px-2 py-2 rounded-full transition-all">
+                <i class="fa-solid fa-shapes text-sm"></i>
+                <span>الأصناف</span>
+            </button>
+
+            <!-- Brands -->
+            <button onclick="switchTab('brands')" id="nav-brands" class="nav-item flex items-center gap-1.5 text-slate-400 font-bold text-xs hover:text-purple-600 px-2 py-2 rounded-full transition-all">
+                <i class="fa-solid fa-layer-group text-sm"></i>
+                <span>الماركات</span>
+            </button>
+
+            <!-- Discover Reels -->
+            <button onclick="switchTab('discover')" id="nav-discover" class="nav-item flex items-center gap-1.5 text-slate-400 font-bold text-xs hover:text-purple-600 px-2 py-2 rounded-full transition-all">
+                <i class="fa-solid fa-play text-sm"></i>
+                <span>اكتشف</span>
+            </button>
+
+            <!-- More -->
+            <button onclick="switchTab('more')" id="nav-more" class="nav-item flex items-center gap-1.5 text-slate-400 font-bold text-xs hover:text-purple-600 px-2 py-2 rounded-full transition-all">
+                <i class="fa-solid fa-ellipsis text-sm"></i>
+                <span>المزيد</span>
+            </button>
+
+        </nav>
+
+
+        <!-- ================= CART MODAL ================= -->
+        <div id="cart-modal" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-sm flex justify-center items-end sm:items-center">
+            <div class="bg-white w-full max-w-[480px] rounded-t-3xl sm:rounded-3xl p-5 max-h-[85vh] flex flex-col justify-between shadow-2xl animate-slide-up">
+                
+                <div>
+                    <!-- Modal Header -->
+                    <div class="flex justify-between items-center border-b pb-3 mb-3">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-bag-shopping"></i>
+                            </div>
+                            <h3 class="font-black text-slate-800 text-base">سلة التسوق الحالية</h3>
+                        </div>
+                        <button onclick="closeCart()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <!-- Cart Scrollable Items -->
+                    <div id="cart-items-container" class="space-y-3 overflow-y-auto max-h-[45vh] pr-1">
+                        <!-- Items rendered via JS -->
+                    </div>
+                </div>
+
+                <!-- Footer Summary & Order Button -->
+                <div class="border-t pt-3 mt-3 space-y-3">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-slate-500 font-bold">المجموع الكلي:</span>
+                        <span id="cart-total-price" class="text-purple-700 font-black text-lg">0 د.ع</span>
+                    </div>
+
+                    <!-- Direct WhatsApp Checkout Button -->
+                    <button onclick="checkoutWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 rounded-2xl flex items-center justify-center gap-2 shadow-lg transition active:scale-95">
+                        <i class="fa-brands fa-whatsapp text-xl"></i>
+                        إرسال الطلب عبر الواتساب للمحل
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ================= ADMIN PANEL MODAL (لوحة التحكم) ================= -->
+        <div id="admin-modal" class="fixed inset-0 bg-black/70 z-50 hidden backdrop-blur-sm flex justify-center items-center p-3">
+            <div class="bg-white w-full max-w-[460px] rounded-3xl p-5 max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
+                
+                <div class="flex justify-between items-center border-b pb-2">
+                    <div class="flex items-center gap-2">
+                        <span class="text-amber-500 text-xl"><i class="fa-solid fa-gears"></i></span>
+                        <h3 class="font-extrabold text-slate-800 text-base">لوحة تحكم الأدمن (إدارة المنتجات)</h3>
+                    </div>
+                    <button onclick="toggleAdminModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Add New Product Form -->
+                <form id="add-product-form" onsubmit="handleAddProduct(event)" class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-2.5 text-xs">
+                    <h4 class="font-black text-slate-700 text-xs">إضافة منتج جديد للمتجر:</h4>
+                    
+                    <div>
+                        <label class="block font-bold text-slate-600 mb-1">اسم المنتج</label>
+                        <input type="text" id="admin-title" required placeholder="مثال: سماعة لاسلكية أنكر Soundcore" class="w-full bg-white p-2 rounded-xl border border-slate-300">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block font-bold text-slate-600 mb-1">السعر الحالي (د.ع)</label>
+                            <input type="number" id="admin-price" required placeholder="19000" class="w-full bg-white p-2 rounded-xl border border-slate-300">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-600 mb-1">السعر القديم (اختياري)</label>
+                            <input type="number" id="admin-old-price" placeholder="25000" class="w-full bg-white p-2 rounded-xl border border-slate-300">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block font-bold text-slate-600 mb-1">القسم</label>
+                            <select id="admin-category" class="w-full bg-white p-2 rounded-xl border border-slate-300 font-bold">
+                                <option value="phones">هواتف محمولة</option>
+                                <option value="tablets">أجهزة لوحية</option>
+                                <option value="laptops">حواسيب</option>
+                                <option value="audio">سماعات رأس</option>
+                                <option value="gaming">أجهزة ألعاب</option>
+                                <option value="accessories">ملحقات وماوس</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-600 mb-1">اسم الماركة</label>
+                            <input type="text" id="admin-brand" placeholder="Anker / Apple / Sony" class="w-full bg-white p-2 rounded-xl border border-slate-300">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-600 mb-1">رابط الصورة (URL)</label>
+                        <input type="url" id="admin-image" placeholder="https://..." class="w-full bg-white p-2 rounded-xl border border-slate-300">
+                    </div>
+
+                    <button type="submit" class="w-full bg-purple-700 hover:bg-purple-800 text-white font-extrabold py-2.5 rounded-xl text-xs transition">
+                        + إضافة المنتج فوراً للمتجر
+                    </button>
+                </form>
+
+                <!-- Current Inventory List for Delete / Edit -->
+                <div>
+                    <h4 class="font-black text-slate-700 text-xs mb-2">قائمة المنتجات الحالية بالمخزن:</h4>
+                    <div id="admin-products-list" class="space-y-2 max-h-40 overflow-y-auto">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Notification Toast Toast -->
+        <div id="toast-msg" class="fixed top-16 left-1/2 -translate-x-1/2 bg-slate-900/90 text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-lg z-50 transition-all duration-300 opacity-0 pointer-events-none">
+            تمت العملية بنجاح!
+        </div>
+
+    </div>
+
+    <!-- MAIN JAVASCRIPT LOGIC -->
+    <script>
+        // Default Mock Initial Products matching Screenshots
+        const initialProducts = [
+            {
+                id: 101,
+                title: "سماعة لاسلكية انكر Soundcore Life",
+                category: "audio",
+                price: 19000,
+                oldPrice: 25000,
+                discountText: "خصم 6,000 د.ع",
+                brand: "Anker",
+                brandBadge: "https://logo.clearbit.com/anker.com",
+                image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80"
+            },
+            {
+                id: 102,
+                title: "شاحن محمول 10,000 مللي أمبير - Momax",
+                category: "accessories",
+                price: 23000,
+                oldPrice: 35000,
+                discountText: "خصم 12,000 د.ع",
+                brand: "momax",
+                brandBadge: "https://logo.clearbit.com/momax.net",
+                image: "https://images.unsplash.com/photo-1609592424109-dd9892f1b177?auto=format&fit=crop&w=400&q=80"
+            },
+            {
+                id: 103,
+                title: "آيفون 15 بروماكس تيتانيوم - 256GB",
+                category: "phones",
+                price: 1450000,
+                oldPrice: 1550000,
+                discountText: "خصم 100,000 د.ع",
+                brand: "Apple",
+                brandBadge: "https://logo.clearbit.com/apple.com",
+                image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=400&q=80"
+            },
+            {
+                id: 104,
+                title: "لابتوب قيمنق Lenovo Legion Core i7",
+                category: "laptops",
+                price: 1250000,
+                oldPrice: 1380000,
+                discountText: "عروض ممتازة",
+                brand: "Lenovo",
+                brandBadge: "https://logo.clearbit.com/lenovo.com",
+                image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=400&q=80"
+            },
+            {
+                id: 105,
+                title: "جهاز بلايستيشن PlayStation 5 Slim",
+                category: "gaming",
+                price: 680000,
+                oldPrice: 720000,
+                discountText: "خصم خاص",
+                brand: "Sony",
+                brandBadge: "https://logo.clearbit.com/sony.com",
+                image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=400&q=80"
+            },
+            {
+                id: 106,
+                title: "شاشة قيمنق منحنية 165Hz MSI Gaming",
+                category: "monitors",
+                price: 310000,
+                oldPrice: 350000,
+                discountText: "تخفيض ممتاز",
+                brand: "MSI",
+                brandBadge: "https://logo.clearbit.com/msi.com",
+                image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=400&q=80"
+            }
+        ];
+
+        // Brands List matching Image 5
+        const brandsList = [
+            { name: "Apple", logo: "https://logo.clearbit.com/apple.com" },
+            { name: "Samsung", logo: "https://logo.clearbit.com/samsung.com" },
+            { name: "Xiaomi", logo: "https://logo.clearbit.com/mi.com" },
+            { name: "TCL", logo: "https://logo.clearbit.com/tcl.com" },
+            { name: "Sony PS", logo: "https://logo.clearbit.com/playstation.com" },
+            { name: "Beats", logo: "https://logo.clearbit.com/beatsbydre.com" },
+            { name: "Nintendo", logo: "https://logo.clearbit.com/nintendo.com" },
+            { name: "Anker", logo: "https://logo.clearbit.com/anker.com" },
+            { name: "JBL", logo: "https://logo.clearbit.com/jbl.com" },
+            { name: "Tecno", logo: "https://logo.clearbit.com/tecno-mobile.com" },
+            { name: "SanDisk", logo: "https://logo.clearbit.com/sandisk.com" },
+            { name: "WiWU", logo: "https://via.placeholder.com/80/ffffff/6C5CE7?text=WiWU" }
+        ];
+
+        // Reels Videos Mock List matching Image 2
+        const reelsList = [
+            { title: "Health tracker", views: "154", img: "https://images.unsplash.com/photo-1510519138161-584459eb1b37?auto=format&fit=crop&w=300&q=80" },
+            { title: "Display 16\" 2K Laptop", views: "153", img: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=300&q=80" },
+            { title: "Intel Core Ultra 7", views: "184", img: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=300&q=80" },
+            { title: "Xiaomi TV Box S", views: "595", img: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=300&q=80" },
+            { title: "Gaming Wireless Mouse", views: "699", img: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=300&q=80" },
+            { title: "iPhone Screen Mirror", views: "123", img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=300&q=80" }
+        ];
+
+        // Global State
+        let products = JSON.parse(localStorage.getItem('karada_products')) || initialProducts;
+        let cart = JSON.parse(localStorage.getItem('karada_cart')) || [];
+        let activeCategory = 'all';
+
+        // Save State
+        function saveProducts() {
+            localStorage.setItem('karada_products', JSON.stringify(products));
+        }
+        function saveCart() {
+            localStorage.setItem('karada_cart', JSON.stringify(cart));
+            updateCartBadge();
+        }
+
+        // Initialize App
+        window.onload = function() {
+            renderProducts();
+            renderBrands();
+            renderReels();
+            updateCartBadge();
+            renderAdminInventory();
+        };
+
+        // Render Home Products Grid
+        function renderProducts(itemsToRender = null) {
+            const grid = document.getElementById('home-products-grid');
+            const list = itemsToRender || (activeCategory === 'all' ? products : products.filter(p => p.category === activeCategory));
+            
+            grid.innerHTML = '';
+
+            if (list.length === 0) {
+                grid.innerHTML = `<div class="col-span-2 text-center py-8 text-slate-400 font-bold text-xs">لا توجد منتجات في هذا القسم حالياً</div>`;
+                return;
+            }
+
+            list.forEach(product => {
+                grid.innerHTML += `
+                    <div class="bg-white rounded-3xl p-3 border border-slate-100 shadow-sm flex flex-col justify-between relative group hover:shadow-md transition">
+                        
+                        <!-- Top Badge Discount -->
+                        ${product.discountText ? `
+                            <span class="absolute top-3 right-3 bg-purple-600 text-white text-[9px] font-black px-2 py-0.5 rounded-full z-10 shadow-sm">
+                                ${product.discountText}
+                            </span>
+                        ` : ''}
+
+                        <!-- Product Image -->
+                        <div class="h-32 w-full rounded-2xl bg-slate-50 overflow-hidden flex items-center justify-center p-2 mb-2">
+                            <img src="${product.image}" onerror="this.src='https://via.placeholder.com/200/FAF9FE/6C5CE7?text=Karada+Store'" class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300">
+                        </div>
+
+                        <!-- Info -->
+                        <div>
+                            <h3 class="font-extrabold text-xs text-slate-800 line-clamp-2 leading-snug">${product.title}</h3>
+                            
+                            <!-- Price & Old Price -->
+                            <div class="mt-2 flex items-baseline gap-1.5 flex-wrap">
+                                <span class="text-purple-700 font-black text-xs">${product.price.toLocaleString()} د.ع</span>
+                                ${product.oldPrice ? `<span class="text-[10px] text-slate-400 line-through font-bold">${product.oldPrice.toLocaleString()}</span>` : ''}
+                            </div>
+
+                            <!-- Brand Label -->
+                            <div class="mt-2 flex items-center justify-between">
+                                <span class="text-[10px] font-bold text-slate-400">${product.brand || 'Original'}</span>
+                                <button onclick="addToCart(${product.id})" class="w-8 h-8 rounded-full bg-purple-50 hover:bg-purple-600 hover:text-white text-purple-700 font-bold flex items-center justify-center transition active:scale-90 shadow-sm">
+                                    <i class="fa-solid fa-plus text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                `;
+            });
+        }
+
+        // Render Brands Grid
+        function renderBrands() {
+            const container = document.getElementById('brands-grid');
+            container.innerHTML = '';
+            brandsList.forEach(b => {
+                container.innerHTML += `
+                    <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center justify-center gap-1.5 hover:border-purple-300 transition">
+                        <img src="${b.logo}" onerror="this.src='https://via.placeholder.com/80/ffffff/4834D4?text=${b.name}'" class="w-10 h-10 object-contain">
+                        <span class="text-[10px] font-bold text-slate-600 truncate w-full text-center">${b.name}</span>
+                    </div>
+                `;
+            });
+        }
+
+        // Render Reels Grid (Discover)
+        function renderReels() {
+            const container = document.getElementById('reels-grid');
+            container.innerHTML = '';
+            reelsList.forEach(r => {
+                container.innerHTML += `
+                    <div class="relative rounded-2xl overflow-hidden h-48 bg-slate-800 shadow-sm group cursor-pointer" onclick="showToast('جاري تشغيل المعاينة...')">
+                        <img src="${r.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-90">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-2 text-white">
+                            <span class="text-[10px] font-bold flex items-center gap-1">
+                                <i class="fa-solid fa-play text-[8px]"></i> ${r.views}
+                            </span>
+                            <p class="text-[10px] font-extrabold line-clamp-1">${r.title}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Category Filtering
+        function filterCategory(cat) {
+            activeCategory = cat;
+            document.querySelectorAll('.cat-pill').forEach(btn => {
+                btn.classList.remove('bg-purple-600', 'text-white');
+                btn.classList.add('bg-white', 'text-slate-700');
+            });
+            event.target.classList.remove('bg-white', 'text-slate-700');
+            event.target.classList.add('bg-purple-600', 'text-white');
+            renderProducts();
+        }
+
+        function filterCategoryAndSwitch(cat) {
+            activeCategory = cat;
+            switchTab('home');
+            renderProducts();
+        }
+
+        // Search Handler
+        function handleSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            if (!query) {
+                renderProducts();
+                return;
+            }
+            const filtered = products.filter(p => p.title.toLowerCase().includes(query) || p.brand.toLowerCase().includes(query));
+            renderProducts(filtered);
+        }
+
+        // Tab Navigation Switcher
+        function switchTab(tabId) {
+            // Hide all pages
+            ['home', 'categories', 'brands', 'discover', 'more'].forEach(p => {
+                document.getElementById(`page-${p}`).classList.add('hidden');
+            });
+
+            // Show selected page
+            document.getElementById(`page-${tabId}`).classList.remove('hidden');
+
+            // Reset navbar styling
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.className = 'nav-item flex items-center gap-1.5 text-slate-400 font-bold text-xs hover:text-purple-600 px-2 py-2 rounded-full transition-all';
+            });
+
+            // Highlight active nav button
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.className = 'nav-item flex items-center gap-1.5 text-purple-700 font-black text-xs bg-purple-50 px-3.5 py-2 rounded-full transition-all';
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Cart Logic
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+
+            saveCart();
+            showToast(`تمت إضافة (${product.title}) إلى السلة`);
+        }
+
+        function updateCartBadge() {
+            const badge = document.getElementById('cart-badge');
+            const totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
+            if (totalItems > 0) {
+                badge.innerText = totalItems;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function openCart() {
+            renderCartItems();
+            document.getElementById('cart-modal').classList.remove('hidden');
+        }
+
+        function closeCart() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        }
+
+        function renderCartItems() {
+            const container = document.getElementById('cart-items-container');
+            const totalElem = document.getElementById('cart-total-price');
+            container.innerHTML = '';
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-slate-400 font-bold text-xs">
+                        <i class="fa-solid fa-basket-shopping text-3xl mb-2 block opacity-40"></i>
+                        سلة التسوق فارغة حالياً
+                    </div>
+                `;
+                totalElem.innerText = '0 د.ع';
+                return;
+            }
+
+            let totalPrice = 0;
+
+            cart.forEach((item, index) => {
+                const subtotal = item.price * item.qty;
+                totalPrice += subtotal;
+
+                container.innerHTML += `
+                    <div class="flex items-center justify-between bg-slate-50 p-2.5 rounded-2xl border border-slate-100">
+                        <div class="flex items-center gap-2.5">
+                            <img src="${item.image}" class="w-12 h-12 object-contain rounded-xl bg-white p-1">
+                            <div>
+                                <h4 class="font-extrabold text-xs text-slate-800 line-clamp-1">${item.title}</h4>
+                                <span class="text-[11px] font-bold text-purple-700">${item.price.toLocaleString()} د.ع</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <div class="flex items-center bg-white rounded-xl border border-slate-200">
+                                <button onclick="changeQty(${index}, -1)" class="w-7 h-7 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-r-xl">-</button>
+                                <span class="text-xs font-extrabold px-2 text-slate-800">${item.qty}</span>
+                                <button onclick="changeQty(${index}, 1)" class="w-7 h-7 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-l-xl">+</button>
+                            </div>
+                            <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 text-xs p-1">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            totalElem.innerText = `${totalPrice.toLocaleString()} د.ع`;
+        }
+
+        function changeQty(index, delta) {
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            saveCart();
+            renderCartItems();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveCart();
+            renderCartItems();
+        }
+
+        // Direct WhatsApp Checkout
+        function checkoutWhatsApp() {
+            if (cart.length === 0) {
+                showToast('سلتك فارغة!');
+                return;
+            }
+
+            const shopPhone = "9647800000000"; // رقم محلك هنا
+            let msg = "مرحباً *متجر الكرادة للإلكترونيات* 🛍️\n";
+            msg += "أرغب بحجز الطلبية التالية:\n\n";
+
+            let grandTotal = 0;
+            cart.forEach((item, i) => {
+                const total = item.price * item.qty;
+                grandTotal += total;
+                msg += `${i+1}. *${item.title}*\n   العدد: ${item.qty} | السعر: ${total.toLocaleString()} د.ع\n`;
+            });
+
+            msg += `\n*المجموع الكلي:* ${grandTotal.toLocaleString()} د.ع\n`;
+            msg += "يرجى تأكيد الحجز وتحديد تفاصيل التوصيل.";
+
+            const encoded = encodeURIComponent(msg);
+            window.open(`https://wa.me/${shopPhone}?text=${encoded}`, '_blank');
+        }
+
+        // Admin Panel CRUD
+        function toggleAdminModal() {
+            document.getElementById('admin-modal').classList.toggle('hidden');
+        }
+
+        function handleAddProduct(event) {
+            event.preventDefault();
+
+            const title = document.getElementById('admin-title').value;
+            const price = parseInt(document.getElementById('admin-price').value);
+            const oldPrice = parseInt(document.getElementById('admin-old-price').value) || null;
+            const category = document.getElementById('admin-category').value;
+            const brand = document.getElementById('admin-brand').value || 'Original';
+            const image = document.getElementById('admin-image').value || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80';
+
+            const newProd = {
+                id: Date.now(),
+                title,
+                category,
+                price,
+                oldPrice,
+                discountText: oldPrice ? `خصم ${(oldPrice - price).toLocaleString()} د.ع` : null,
+                brand,
+                image
+            };
+
+            products.unshift(newProd);
+            saveProducts();
+            renderProducts();
+            renderAdminInventory();
+
+            document.getElementById('add-product-form').reset();
+            showToast('تمت إضافة المنتج بنجاح للمتجر!');
+        }
+
+        function renderAdminInventory() {
+            const container = document.getElementById('admin-products-list');
+            container.innerHTML = '';
+            products.forEach(p => {
+                container.innerHTML += `
+                    <div class="flex items-center justify-between bg-white p-2 rounded-xl border border-slate-200 text-xs">
+                        <div class="flex items-center gap-2 line-clamp-1 max-w-[200px]">
+                            <img src="${p.image}" class="w-8 h-8 object-contain">
+                            <span class="font-bold text-slate-800 truncate">${p.title}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-purple-700 font-extrabold">${p.price.toLocaleString()} د.ع</span>
+                            <button onclick="deleteProduct(${p.id})" class="text-red-500 font-bold hover:underline">حذف</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function deleteProduct(id) {
+            products = products.filter(p => p.id !== id);
+            saveProducts();
+            renderProducts();
+            renderAdminInventory();
+            showToast('تم حذف المنتج من المتجر');
+        }
+
+        // Toast Notification Helper
+        function showToast(msg) {
+            const toast = document.getElementById('toast-msg');
+            toast.innerText = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
