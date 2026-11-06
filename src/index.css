@@ -1,1 +1,96 @@
-@import "../styles/main.css";
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --brand-purple: #6C5CE7;
+    --brand-purple-light: #FAF9FE;
+    --brand-dark-purple: #4834D4;
+    --brand-gold: #F2A900;
+  }
+
+  body {
+    font-family: 'Cairo', 'Tajawal', system-ui, -apple-system, sans-serif;
+    background-color: #F1F2F6;
+    color: #1E293B;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+  }
+}
+
+/* App Shell (Mobile centered view on desktop, full native app on phone) */
+.light-app-container,
+.karada-shell {
+  max-width: 520px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #FAF9FE;
+  position: relative;
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(108, 92, 231, 0.06);
+}
+
+@media (min-width: 1024px) {
+  .light-app-container,
+  .karada-shell {
+    max-width: 960px;
+  }
+}
+
+/* Luxury Karada-Style Product Card */
+.karada-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 10px -2px rgba(108, 92, 231, 0.05);
+  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.karada-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(108, 92, 231, 0.35);
+  box-shadow: 0 12px 25px -4px rgba(108, 92, 231, 0.12);
+}
+
+/* Centered Photo Frame */
+.karada-img-frame {
+  background: radial-gradient(circle at center, #F4F3FB 0%, #FAF9FE 80%);
+  border-radius: 1.25rem;
+  border: 1px solid rgba(108, 92, 231, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Floating Bottom Navigation Dock */
+.floating-bottom-dock {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(108, 92, 231, 0.15);
+  box-shadow: 0 10px 32px rgba(108, 92, 231, 0.15);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Hide Scrollbars */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F8FAFC;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
