@@ -1,13 +1,14 @@
 export type ProductCategory =
   | 'all'
   | 'phones'
-  | 'tablets'
   | 'laptops'
-  | 'audio'
-  | 'gaming'
-  | 'monitors'
-  | 'accessories'
   | 'chairs'
+  | 'gaming'
+  | 'audio'
+  | 'chargers'
+  | 'accessories'
+  | 'monitors'
+  | 'cameras'
   | string;
 
 export interface CategoryItem {
@@ -15,7 +16,8 @@ export interface CategoryItem {
   name: string;
   nameEn?: string;
   image: string;
-  gradient: string; // e.g. "from-amber-400 to-amber-500" or hex
+  gradient?: string; // Tailwind gradient classes
+  accentColor?: string; // Hex color for artistic wave
   description?: string;
   icon?: string;
 }
@@ -25,7 +27,8 @@ export interface BrandItem {
   name: string;
   displayName: string;
   logo: string;
-  categoryIds?: string[]; // which categories this brand belongs to
+  categoryIds?: string[]; // categories this brand belongs to
+  sector?: 'phones' | 'gaming' | 'audio' | string;
 }
 
 export interface Product {
@@ -34,7 +37,7 @@ export interface Product {
   titleEn?: string;
   category: string;
   brand: string;
-  price: number; // In Iraqi Dinars (د.ع)
+  price: number; // In Iraqi Dinars (د.ع) - flexible with NO validation constraints
   oldPrice?: number;
   discountText?: string;
   badge?: string;
@@ -62,26 +65,14 @@ export interface Reel {
   createdAt?: number;
 }
 
-export interface CartItem {
-  product: Product;
-  quantity: number;
-}
-
-export interface CustomerOrderInfo {
-  name: string;
-  phone: string;
-  city: string;
-  address: string;
-  notes?: string;
-}
-
 export interface StoreSettings {
-  whatsappNumber: string; // e.g. "9647800000000"
-  instagramHandle: string; // e.g. "brandstore.iq"
   storeName: string;
   storeNameAr: string;
   storeAddress: string;
   openHours: string;
+  instagramHandle: string; // e.g. "716xstor.iq"
+  instagramAccessToken?: string;
+  whatsappNumber?: string;
 }
 
 export type SortOption = 'newest' | 'price-asc' | 'price-desc' | 'popular';

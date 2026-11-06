@@ -1,20 +1,16 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Product } from '../types';
-import { Plus, Eye, Check } from 'lucide-react';
+import { Eye, Cpu } from 'lucide-react';
 
 interface ProductCardProps {
   product: Product;
   onViewDetails: (product: Product) => void;
-  onAddToCart: (product: Product) => void;
-  isAdded?: boolean;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
-  onViewDetails,
-  onAddToCart,
-  isAdded
+  onViewDetails
 }) => {
   return (
     <motion.div
@@ -23,7 +19,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.25 }}
-      className="karada-card p-3 flex flex-col justify-between group"
+      onClick={() => onViewDetails(product)}
+      className="karada-card p-3 flex flex-col justify-between group cursor-pointer"
     >
       {/* Top Badges */}
       <div className="flex items-center justify-between gap-1 mb-2">
@@ -42,10 +39,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       </div>
 
       {/* Centered Product Photo Frame */}
-      <div
-        onClick={() => onViewDetails(product)}
-        className="karada-img-frame h-36 w-full cursor-pointer mb-2.5 p-2 group-hover:scale-[1.02] transition-transform duration-300"
-      >
+      <div className="karada-img-frame h-36 w-full mb-2.5 p-2 group-hover:scale-[1.03] transition-transform duration-300">
         <img
           src={product.image}
           alt={product.title}
@@ -53,18 +47,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           className="max-h-full max-w-full object-contain drop-shadow-sm"
           onError={(e) => {
             (e.target as HTMLImageElement).src =
-              'https://via.placeholder.com/200/FAF9FE/6C5CE7?text=BRAND+STORE';
+              'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=400&q=80';
           }}
         />
       </div>
 
-      {/* Info */}
+      {/* Title & Specs summary */}
       <div className="space-y-1.5 flex-1 flex flex-col justify-between">
         <div>
-          <h3
-            onClick={() => onViewDetails(product)}
-            className="font-black text-xs text-slate-800 line-clamp-2 leading-snug cursor-pointer hover:text-purple-600 transition"
-          >
+          <h3 className="font-black text-xs text-slate-800 line-clamp-2 leading-snug group-hover:text-purple-600 transition">
             {product.title}
           </h3>
           {product.titleEn && (
@@ -80,7 +71,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <span className="text-purple-700 font-black text-xs sm:text-sm">
               {product.price.toLocaleString('en-US')} د.ع
             </span>
-            {product.oldPrice && (
+            {product.oldPrice && product.oldPrice !== product.price && (
               <span className="text-[10px] text-slate-400 line-through font-bold">
                 {product.oldPrice.toLocaleString('en-US')}
               </span>
@@ -88,26 +79,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </div>
         </div>
 
-        {/* Action Buttons: View Details & Add to Cart */}
-        <div className="mt-2 pt-2 flex items-center gap-1.5 border-t border-slate-100">
+        {/* Action Button: View Details (Pure Catalog - No Cart/WhatsApp) */}
+        <div className="mt-2 pt-2 border-t border-slate-100">
           <button
-            onClick={() => onViewDetails(product)}
-            className="flex-1 py-1.5 px-2 bg-slate-100 hover:bg-purple-50 text-slate-700 hover:text-purple-700 rounded-xl text-[10px] font-black transition flex items-center justify-center gap-1 cursor-pointer active:scale-95"
+            type="button"
+            className="w-full py-2 px-2 bg-slate-100 group-hover:bg-purple-600 text-slate-700 group-hover:text-white rounded-xl text-[11px] font-black transition flex items-center justify-center gap-1.5 shadow-sm active:scale-95 cursor-pointer"
           >
-            <Eye size={12} />
-            <span>المواصفات</span>
-          </button>
-
-          <button
-            onClick={() => onAddToCart(product)}
-            className={`w-8 h-8 rounded-xl flex items-center justify-center transition active:scale-90 cursor-pointer shadow-sm ${
-              isAdded
-                ? 'bg-emerald-600 text-white'
-                : 'bg-purple-600 hover:bg-purple-700 text-white'
-            }`}
-            title="إضافة إلى السلة"
-          >
-            {isAdded ? <Check size={14} className="stroke-[3]" /> : <Plus size={15} />}
+            <Eye size={13} />
+            <span>عرض المواصفات الكاملة</span>
           </button>
         </div>
       </div>

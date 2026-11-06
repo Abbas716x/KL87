@@ -10,8 +10,6 @@ interface CategoryDetailViewProps {
   brands: BrandItem[];
   onBack: () => void;
   onViewProduct: (product: Product) => void;
-  onAddToCart: (product: Product) => void;
-  addedProductId?: string | null;
 }
 
 export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({
@@ -19,9 +17,7 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({
   products,
   brands,
   onBack,
-  onViewProduct,
-  onAddToCart,
-  addedProductId
+  onViewProduct
 }) => {
   // Brand selection state ('all' or specific brand name)
   const [selectedBrand, setSelectedBrand] = useState<string>('all');
@@ -165,8 +161,6 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({
                 key={product.id}
                 product={product}
                 onViewDetails={onViewProduct}
-                onAddToCart={onAddToCart}
-                isAdded={addedProductId === product.id}
               />
             ))}
           </motion.div>

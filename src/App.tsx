@@ -5,7 +5,6 @@ import {
   CategoryItem,
   BrandItem,
   Reel,
-  CartItem,
   StoreSettings,
   SortOption
 } from './types';
@@ -31,7 +30,6 @@ import { CategoryDetailView } from './components/CategoryDetailView';
 import { BrandsView } from './components/BrandsView';
 import { ReelsView } from './components/ReelsView';
 import { ProductDetailView } from './components/ProductDetailView';
-import { CartView } from './components/CartView';
 import { AdminPortal } from './components/AdminPortal';
 
 import {
@@ -40,13 +38,43 @@ import {
   RotateCcw,
   Sparkles,
   CheckCircle2,
-  Cpu,
-  Layers
+  Cpu
 } from 'lucide-react';
 
-const CART_STORAGE_KEY = 'brand_store_cart';
-
 export default function App() {
+  // 3️⃣ Secret Admin Route Detection (/19QWADMIN)
+  const [currentRoute, setCurrentRoute] = useState<string>(() => {
+    const path = window.location.pathname.toUpperCase();
+    const hash = window.location.hash.toUpperCase();
+    return path.includes('19QWADMIN') || hash.includes('19QWADMIN') ? '/19QWADMIN' : '/';
+  });
+
+  // Listen to browser navigation & URL changes
+  useEffect(() => {
+    const handleLocationChange = () => {
+      const path = window.location.pathname.toUpperCase();
+      const hash = window.location.hash.toUpperCase();
+      const isAdmin = path.includes('19QWADMIN') || hash.includes('19QWADMIN');
+      setCurrentRoute(isAdmin ? '/19QWADMIN' : '/');
+    };
+
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+    };
+  }, []);
+
+  const navigateTo = (route: string) => {
+    try {
+      window.history.pushState(null, '', route);
+    } catch {
+      window.location.hash = route;
+    }
+    setCurrentRoute(route);
+  };
+
   // Real-time Data States
   const [products, setProducts] = useState<Product[]>(defaultProducts);
   const [categories, setCategories] = useState<CategoryItem[]>(defaultCategories);
@@ -54,17 +82,7 @@ export default function App() {
   const [reels, setReels] = useState<Reel[]>(defaultReels);
   const [settings, setSettings] = useState<StoreSettings>(defaultSettings);
 
-  // Cart State with localStorage persistence
-  const [cart, setCart] = useState<CartItem[]>(() => {
-    try {
-      const saved = localStorage.getItem(CART_STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  // Navigation & View States
+  // Client Navigation & View States (Pure Catalog: 4 tabs, NO CART)
   const [activeTab, setActiveTab] = useState<NavTab>('home');
   const [selectedCategory, setSelectedCategory] = useState<CategoryItem | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -74,23 +92,12 @@ export default function App() {
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [filterBrand, setFilterBrand] = useState<string>('all');
   const [minPrice, setMinPrice] = useState<number>(0);
-  const [maxPrice, setMaxPrice] = useState<number>(3500000);
+  const [maxPrice, setMaxPrice] = useState<number>(5000000);
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
 
-  // Admin Modal & Toast
-  const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
+  // Toast Notification
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [recentlyAddedId, setRecentlyAddedId] = useState<string | null>(null);
-
-  // Sync Cart changes to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
-    } catch (e) {
-      console.warn('Failed to save cart to localStorage:', e);
-    }
-  }, [cart]);
 
   // Real-time Firestore Subscriptions
   useEffect(() => {
@@ -119,7 +126,6 @@ export default function App() {
     };
   }, []);
 
-  // Toast Helper
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => {
@@ -127,73 +133,21 @@ export default function App() {
     }, 2800);
   };
 
-  // Cart Management
-  const handleAddToCart = (product: Product, quantity: number = 1) => {
-    setCart((prev) => {
-      const idx = prev.findIndex((item) => item.product.id === product.id);
-      if (idx >= 0) {
-        const updated = [...prev];
-        updated[idx] = {
-          ...updated[idx],
-          quantity: updated[idx].quantity + quantity
-        };
-        return updated;
-      }
-      return [...prev, { product, quantity }];
-    });
-
-    setRecentlyAddedId(product.id);
-    setTimeout(() => setRecentlyAddedId(null), 1800);
-    showToast(`تمت إضافة "${product.title}" إلى السلة 🛍️`);
-  };
-
-  const handleUpdateQuantity = (productId: string, delta: number) => {
-    setCart((prev) => {
-      return prev
-        .map((item) => {
-          if (item.product.id === productId) {
-            const newQty = item.quantity + delta;
-            return newQty > 0 ? { ...item, quantity: newQty } : null;
-          }
-          return item;
-        })
-        .filter((item): item is CartItem => item !== null);
-    });
-  };
-
-  const handleRemoveFromCart = (productId: string) => {
-    setCart((prev) => prev.filter((item) => item.product.id !== productId));
-    showToast('تم حذف الجهاز من السلة');
-  };
-
-  const handleClearCart = () => {
-    if (cart.length === 0) return;
-    if (confirm('هل ترغب بإفراغ سلة الطلبات؟')) {
-      setCart([]);
-      showToast('تم إفراغ السلة بالكامل');
-    }
-  };
-
-  const totalCartCount = useMemo(() => {
-    return cart.reduce((sum, item) => sum + item.quantity, 0);
-  }, [cart]);
-
   // Active Filters Count
   const activeFilterCount = useMemo(() => {
     let count = 0;
     if (filterCategory !== 'all') count++;
     if (filterBrand !== 'all') count++;
-    if (minPrice > 0 || maxPrice < 3500000) count++;
+    if (minPrice > 0 || maxPrice < 5000000) count++;
     if (sortBy !== 'newest') count++;
     return count;
   }, [filterCategory, filterBrand, minPrice, maxPrice, sortBy]);
 
-  // Reset Filters
   const handleResetFilters = () => {
     setFilterCategory('all');
     setFilterBrand('all');
     setMinPrice(0);
-    setMaxPrice(3500000);
+    setMaxPrice(5000000);
     setSortBy('newest');
     setSearchQuery('');
   };
@@ -202,7 +156,7 @@ export default function App() {
   const filteredProducts = useMemo(() => {
     let result = [...products];
 
-    // Search query filter
+    // Search query
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
       result = result.filter(
@@ -229,7 +183,7 @@ export default function App() {
       );
     }
 
-    // Price range filter
+    // Price range
     result = result.filter((p) => p.price >= minPrice && p.price <= maxPrice);
 
     // Sorting
@@ -240,21 +194,18 @@ export default function App() {
     } else if (sortBy === 'popular') {
       result.sort((a, b) => (b.badge ? 1 : 0) - (a.badge ? 1 : 0));
     } else {
-      // Newest first
       result.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     }
 
     return result;
   }, [products, searchQuery, filterCategory, filterBrand, minPrice, maxPrice, sortBy]);
 
-  // Navigate to Category details
   const handleSelectCategory = (cat: CategoryItem) => {
     setSelectedCategory(cat);
     setActiveTab('categories');
     setSelectedProduct(null);
   };
 
-  // Navigate to Brand filtered view
   const handleSelectBrand = (brand: BrandItem) => {
     setFilterBrand(brand.name);
     setActiveTab('home');
@@ -263,11 +214,27 @@ export default function App() {
     showToast(`تمت تصفية المنتجات حسب ماركة ${brand.name}`);
   };
 
+  // ================= 3️⃣ SECRET ADMIN VIEW ROUTE (/19QWADMIN) =================
+  if (currentRoute === '/19QWADMIN') {
+    return (
+      <AdminPortal
+        products={products}
+        categories={categories}
+        brands={brands}
+        reels={reels}
+        settings={settings}
+        onShowToast={showToast}
+        onExitAdmin={() => navigateTo('/')}
+      />
+    );
+  }
+
+  // ================= 1️⃣ & 2️⃣ PURE CLIENT CATALOG VIEW (ZERO ADMIN ARTIFACTS) =================
   return (
     <div className="bg-slate-200 min-h-screen text-slate-800 font-sans" dir="rtl">
-      {/* Centered Mobile App Shell (Clean Karada Light Theme) */}
+      {/* Centered Mobile App Shell (Clean Light Theme) */}
       <div className="light-app-container flex flex-col justify-between overflow-x-hidden min-h-screen pb-28">
-        {/* Top Header */}
+        {/* Clean Header - 716XSTOR Branding - ZERO ADMIN BUTTONS */}
         <Header
           searchQuery={searchQuery}
           setSearchQuery={(q) => {
@@ -275,7 +242,6 @@ export default function App() {
             if (activeTab !== 'home') setActiveTab('home');
           }}
           onOpenFilter={() => setIsFilterOpen(true)}
-          onOpenAdmin={() => setIsAdminOpen(true)}
           onLogoClick={() => {
             setActiveTab('home');
             setSelectedCategory(null);
@@ -286,10 +252,10 @@ export default function App() {
 
         {/* Main Viewport Content */}
         <main className="px-3.5 pt-3.5 flex-1 space-y-4">
-          {/* Active Filter Chips Bar (if any filter is applied on Home) */}
+          {/* Active Filter Chips Bar */}
           {activeTab === 'home' && activeFilterCount > 0 && (
             <div className="flex flex-wrap items-center gap-1.5 pb-1">
-              <span className="text-[10px] font-black text-slate-400">فلاتر نشطة:</span>
+              <span className="text-[10px] font-black text-slate-400">تصفية نشطة:</span>
 
               {filterCategory !== 'all' && (
                 <span className="bg-purple-100 text-purple-700 text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1">
@@ -315,39 +281,21 @@ export default function App() {
                 </span>
               )}
 
-              {(minPrice > 0 || maxPrice < 3500000) && (
-                <span className="bg-purple-100 text-purple-700 text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                  <span>
-                    السعر: {minPrice.toLocaleString()} - {maxPrice.toLocaleString()} د.ع
-                  </span>
-                  <button
-                    onClick={() => {
-                      setMinPrice(0);
-                      setMaxPrice(3500000);
-                    }}
-                    className="hover:text-purple-900 cursor-pointer"
-                  >
-                    <X size={11} />
-                  </button>
-                </span>
-              )}
-
               <button
                 onClick={handleResetFilters}
                 className="text-[10px] text-red-500 font-bold hover:underline flex items-center gap-0.5 mr-auto cursor-pointer"
               >
                 <RotateCcw size={10} />
-                <span>إعادة تعيين</span>
+                <span>إلغاء الفلاتر</span>
               </button>
             </div>
           )}
 
-          {/* FULL SCREEN PRODUCT DETAILS VIEW */}
+          {/* FULL SCREEN PRODUCT DETAILS VIEW (PURE CATALOG) */}
           {selectedProduct ? (
             <ProductDetailView
               product={selectedProduct}
               onBack={() => setSelectedProduct(null)}
-              onAddToCart={handleAddToCart}
             />
           ) : (
             /* TABBED VIEWS */
@@ -362,7 +310,7 @@ export default function App() {
                   transition={{ duration: 0.2 }}
                   className="space-y-4"
                 >
-                  {/* Promo Banner Slider (Karada Style) */}
+                  {/* Hero Showcase Banner */}
                   <div className="relative rounded-3xl overflow-hidden bg-slate-900 shadow-sm border border-slate-100">
                     <div
                       className="h-44 sm:h-52 bg-cover bg-center flex flex-col justify-end p-4 sm:p-5 text-white relative"
@@ -370,14 +318,14 @@ export default function App() {
                         backgroundImage: `linear-gradient(to top, rgba(15, 23, 42, 0.9) 10%, rgba(15, 23, 42, 0.3) 60%, transparent 100%), url('https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=800&q=80')`
                       }}
                     >
-                      <span className="bg-amber-500 text-slate-900 text-[10px] font-black px-2.5 py-0.5 rounded-lg w-fit mb-1.5">
-                        {settings.storeName}
+                      <span className="bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded-lg w-fit mb-1.5 font-mono shadow-sm">
+                        716XSTOR
                       </span>
-                      <h3 className="font-black text-sm sm:text-base leading-tight">
-                        كل ما تحتاجه من أجهزة وحواسيب ومعدات Gaming
-                      </h3>
+                      <h2 className="font-black text-sm sm:text-base leading-tight">
+                        كتالوج الأجهزة الإلكترونية ومعدات القيمنق المعتمدة
+                      </h2>
                       <p className="text-xs text-slate-200 mt-1 line-clamp-1">
-                        تصفح الأسعار المعتمدة بالدينار العراقي واطلب مباشرة عبر الواتساب
+                        تصفح المواصفات الرسمية والأسعار بالدينار العراقي قبل زيارة المعرض
                       </p>
                     </div>
                   </div>
@@ -425,13 +373,13 @@ export default function App() {
                     })}
                   </div>
 
-                  {/* Section Header: Products Count & Sorting Badge */}
+                  {/* Section Header */}
                   <div className="flex justify-between items-center pt-1 px-1">
                     <div className="flex items-center gap-1.5">
                       <span className="text-base">🔥🔥🔥</span>
-                      <h2 className="font-black text-slate-800 text-sm sm:text-base">
+                      <h3 className="font-black text-slate-800 text-sm sm:text-base">
                         أحدث الأجهزة المعروضة
-                      </h2>
+                      </h3>
                       <span className="bg-purple-50 text-purple-700 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-purple-100">
                         {filteredProducts.length} جهاز
                       </span>
@@ -441,12 +389,12 @@ export default function App() {
                       onClick={() => setActiveTab('categories')}
                       className="text-xs font-bold text-purple-600 hover:underline flex items-center gap-1 cursor-pointer"
                     >
-                      <span>رؤية الأصناف</span>
+                      <span>تصفح الأقسام</span>
                       <span className="text-[10px]">←</span>
                     </button>
                   </div>
 
-                  {/* Products Catalog Grid (Luxury Rectangular Karada Cards) */}
+                  {/* Products Catalog Grid */}
                   {filteredProducts.length > 0 ? (
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                       {filteredProducts.map((p) => (
@@ -454,8 +402,6 @@ export default function App() {
                           key={p.id}
                           product={p}
                           onViewDetails={(prod) => setSelectedProduct(prod)}
-                          onAddToCart={(prod) => handleAddToCart(prod, 1)}
-                          isAdded={recentlyAddedId === p.id}
                         />
                       ))}
                     </div>
@@ -463,11 +409,8 @@ export default function App() {
                     <div className="bg-white rounded-3xl p-8 text-center border border-slate-100 shadow-sm space-y-2">
                       <Cpu size={36} className="mx-auto text-slate-300" />
                       <h4 className="font-black text-sm text-slate-800">
-                        لم يتم العثور على أجهزة مطابقة للبحث أو الفلتر
+                        لم يتم العثور على أجهزة مطابقة للبحث
                       </h4>
-                      <p className="text-xs text-slate-400">
-                        جرّب توسيع نطاق السعر أو اختيار علامة تجارية أخرى
-                      </p>
                       <button
                         onClick={handleResetFilters}
                         className="mt-2 px-4 py-2 bg-purple-50 text-purple-700 rounded-xl text-xs font-black hover:bg-purple-100 transition cursor-pointer"
@@ -477,13 +420,13 @@ export default function App() {
                     </div>
                   )}
 
-                  {/* Middle Feature Banner */}
+                  {/* Showroom Feature Strip */}
                   <div className="rounded-3xl bg-gradient-to-r from-purple-800 to-indigo-900 p-4 text-white flex items-center justify-between shadow-sm my-2">
                     <div>
-                      <span className="bg-purple-500/30 text-purple-200 text-[9px] font-bold px-2 py-0.5 rounded-full">
-                        {settings.storeNameAr}
+                      <span className="bg-purple-500/30 text-purple-200 text-[9px] font-bold px-2 py-0.5 rounded-full font-mono">
+                        716XSTOR SHOWROOM
                       </span>
-                      <h4 className="font-black text-sm mt-1">تجهيزات كاملة للمنزل وصنّاع المحتوى</h4>
+                      <h4 className="font-black text-sm mt-1">تجهيزات كاملة للمحترفين وصنّاع المحتوى</h4>
                       <p className="text-[11px] text-purple-200 mt-0.5">{settings.openHours}</p>
                     </div>
                     <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-purple-200">
@@ -493,7 +436,7 @@ export default function App() {
                 </motion.div>
               )}
 
-              {/* 2. CATEGORIES VIEW / SUB-CATEGORY BRAND FILTER VIEW */}
+              {/* 2. ARTISTIC WAVE CATEGORIES VIEW */}
               {activeTab === 'categories' && (
                 <motion.div
                   key="categories"
@@ -509,8 +452,6 @@ export default function App() {
                       brands={brands}
                       onBack={() => setSelectedCategory(null)}
                       onViewProduct={(prod) => setSelectedProduct(prod)}
-                      onAddToCart={(prod) => handleAddToCart(prod, 1)}
-                      addedProductId={recentlyAddedId}
                     />
                   ) : (
                     <CategoriesView
@@ -522,7 +463,7 @@ export default function App() {
                 </motion.div>
               )}
 
-              {/* 3. BRANDS VIEW (4-COLUMN SQUARE CARDS GRID) */}
+              {/* 3. 4-COLUMN BRANDS VIEW */}
               {activeTab === 'brands' && (
                 <motion.div
                   key="brands"
@@ -539,7 +480,7 @@ export default function App() {
                 </motion.div>
               )}
 
-              {/* 4. DISCOVER / REELS VIEW */}
+              {/* 4. DISCOVER / AUTOMATED INSTAGRAM REELS */}
               {activeTab === 'reels' && (
                 <motion.div
                   key="reels"
@@ -554,31 +495,11 @@ export default function App() {
                   />
                 </motion.div>
               )}
-
-              {/* 5. SHOPPING CART & WHATSAPP DIRECT ORDER CHECKOUT */}
-              {activeTab === 'cart' && (
-                <motion.div
-                  key="cart"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <CartView
-                    cart={cart}
-                    whatsappNumber={settings.whatsappNumber}
-                    onUpdateQuantity={handleUpdateQuantity}
-                    onRemoveItem={handleRemoveFromCart}
-                    onClearCart={handleClearCart}
-                    onContinueShopping={() => setActiveTab('home')}
-                  />
-                </motion.div>
-              )}
             </AnimatePresence>
           )}
         </main>
 
-        {/* FLOATING GLASSMORPHISM EXPANDING PILL NAVIGATION DOCK */}
+        {/* 7️⃣ FLOATING GLASSMORPHISM PILL DOCK (4 CATALOG TABS ONLY - NO CART) */}
         <FloatingNav
           activeTab={activeTab}
           setActiveTab={(tab) => {
@@ -588,7 +509,6 @@ export default function App() {
               setSelectedCategory(null);
             }
           }}
-          cartCount={totalCartCount}
         />
       </div>
 
@@ -603,7 +523,6 @@ export default function App() {
               className="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 max-h-[85vh] flex flex-col justify-between shadow-2xl space-y-4"
             >
               <div>
-                {/* Modal Header */}
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
@@ -621,15 +540,13 @@ export default function App() {
                   </button>
                 </div>
 
-                {/* Filters Body */}
                 <div className="space-y-3.5 overflow-y-auto max-h-[55vh] pr-1 text-xs">
-                  {/* Category Selection */}
                   <div>
                     <label className="block font-bold text-slate-700 mb-1">القسم</label>
                     <select
                       value={filterCategory}
                       onChange={(e) => setFilterCategory(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-2xl font-bold text-slate-800 focus:outline-none focus:border-purple-300"
+                      className="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-2xl font-bold text-slate-800"
                     >
                       <option value="all">جميع الأقسام</option>
                       {categories.map((c) => (
@@ -640,15 +557,12 @@ export default function App() {
                     </select>
                   </div>
 
-                  {/* Brand Selection */}
                   <div>
-                    <label className="block font-bold text-slate-700 mb-1">
-                      الماركة (العلامة التجارية)
-                    </label>
+                    <label className="block font-bold text-slate-700 mb-1">الماركة (الشركة)</label>
                     <select
                       value={filterBrand}
                       onChange={(e) => setFilterBrand(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-2xl font-bold text-slate-800 focus:outline-none focus:border-purple-300"
+                      className="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-2xl font-bold text-slate-800"
                     >
                       <option value="all">جميع الماركات</option>
                       {brands.map((b) => (
@@ -659,7 +573,6 @@ export default function App() {
                     </select>
                   </div>
 
-                  {/* Price Range */}
                   <div>
                     <div className="flex justify-between items-center mb-1">
                       <span className="font-bold text-slate-700">نطاق السعر بالدينار:</span>
@@ -673,7 +586,6 @@ export default function App() {
                         value={minPrice}
                         step={25000}
                         onChange={(e) => setMinPrice(Number(e.target.value))}
-                        placeholder="الحد الأدنى"
                         className="bg-slate-50 border border-slate-200 p-2 rounded-xl font-bold text-center"
                       />
                       <input
@@ -681,13 +593,11 @@ export default function App() {
                         value={maxPrice}
                         step={25000}
                         onChange={(e) => setMaxPrice(Number(e.target.value))}
-                        placeholder="الحد الأقصى"
                         className="bg-slate-50 border border-slate-200 p-2 rounded-xl font-bold text-center"
                       />
                     </div>
                   </div>
 
-                  {/* Sort Options */}
                   <div>
                     <label className="block font-bold text-slate-700 mb-1">الترتيب حسب</label>
                     <div className="grid grid-cols-2 gap-2">
@@ -726,7 +636,7 @@ export default function App() {
                             : 'border-slate-200 bg-slate-50 text-slate-700'
                         }`}
                       >
-                        <span>السعر: من الأقل للأعلى</span>
+                        <span>السعر: الأقل للأعلى</span>
                         {sortBy === 'price-asc' && <CheckCircle2 size={13} />}
                       </button>
 
@@ -739,7 +649,7 @@ export default function App() {
                             : 'border-slate-200 bg-slate-50 text-slate-700'
                         }`}
                       >
-                        <span>السعر: من الأعلى للأقل</span>
+                        <span>السعر: الأعلى للأقل</span>
                         {sortBy === 'price-desc' && <CheckCircle2 size={13} />}
                       </button>
                     </div>
@@ -747,11 +657,10 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Modal Actions */}
               <div className="border-t border-slate-100 pt-3 flex items-center gap-2">
                 <button
                   onClick={() => setIsFilterOpen(false)}
-                  className="flex-1 py-3 bg-purple-600 hover:bg-purple-700 text-white font-black rounded-2xl text-xs transition cursor-pointer shadow-md shadow-purple-600/25"
+                  className="flex-1 py-3 bg-purple-600 hover:bg-purple-700 text-white font-black rounded-2xl text-xs transition cursor-pointer shadow-md"
                 >
                   تطبيق الفلاتر ({filteredProducts.length} جهاز)
                 </button>
@@ -766,18 +675,6 @@ export default function App() {
           </div>
         )}
       </AnimatePresence>
-
-      {/* DYNAMIC ADMIN PORTAL MODAL */}
-      <AdminPortal
-        isOpen={isAdminOpen}
-        onClose={() => setIsAdminOpen(false)}
-        products={products}
-        categories={categories}
-        brands={brands}
-        reels={reels}
-        settings={settings}
-        onShowToast={showToast}
-      />
 
       {/* TOAST NOTIFICATION */}
       <AnimatePresence>

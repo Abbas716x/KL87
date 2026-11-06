@@ -4,32 +4,38 @@ import { Product } from '../types';
 import {
   ArrowRight,
   ShieldCheck,
-  Check,
-  Plus,
-  Minus,
-  ShoppingBag,
   Store,
-  Cpu
+  Cpu,
+  Share2,
+  Check,
+  CheckCircle2
 } from 'lucide-react';
 
 interface ProductDetailViewProps {
   product: Product;
   onBack: () => void;
-  onAddToCart: (product: Product, quantity: number) => void;
 }
 
 export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
   product,
-  onBack,
-  onAddToCart
+  onBack
 }) => {
-  const [quantity, setQuantity] = useState(1);
-  const [isAdded, setIsAdded] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  const handleAdd = () => {
-    onAddToCart(product, quantity);
-    setIsAdded(true);
-    setTimeout(() => setIsAdded(false), 2000);
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: product.title,
+        text: `${product.title} - ${product.price.toLocaleString('en-US')} د.ع لدى 716XSTOR`,
+        url: window.location.href
+      }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(
+        `${product.title}\nالسعر: ${product.price.toLocaleString('en-US')} د.ع\nالمعرض: 716XSTOR`
+      );
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   const specsList = Object.entries(product.specs || {});
@@ -52,9 +58,19 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
           <span>رجوع للكتالوج</span>
         </button>
 
-        <span className="bg-emerald-50 text-emerald-700 text-[11px] font-black px-2.5 py-0.5 rounded-full border border-emerald-100">
-          متوفر في المعرض ✅
-        </span>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleShare}
+            className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition cursor-pointer"
+            title="مشاركة تفاصيل الجهاز"
+          >
+            {copied ? <Check size={14} className="text-emerald-600" /> : <Share2 size={14} />}
+          </button>
+          <span className="bg-emerald-50 text-emerald-700 text-[11px] font-black px-2.5 py-0.5 rounded-full border border-emerald-100 flex items-center gap-1">
+            <CheckCircle2 size={12} />
+            <span>متوفر بصالة العرض</span>
+          </span>
+        </div>
       </div>
 
       {/* Main Image Showcase Card */}
@@ -66,7 +82,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
             className="max-h-full max-w-full object-contain drop-shadow-md"
             onError={(e) => {
               (e.target as HTMLImageElement).src =
-                'https://via.placeholder.com/300/FAF9FE/6C5CE7?text=BRAND+STORE';
+                'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=600&q=80';
             }}
           />
           {product.badge && (
@@ -96,15 +112,17 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
           )}
         </div>
 
-        {/* Price & Warranty Summary Box */}
+        {/* Price & Official Warranty Summary Box */}
         <div className="w-full mt-4 p-3.5 bg-purple-50/60 rounded-2xl border border-purple-100 flex items-center justify-between flex-wrap gap-2">
           <div>
-            <span className="text-[10px] font-bold text-slate-500 block">السعر المعتمد:</span>
+            <span className="text-[10px] font-bold text-slate-500 block">
+              السعر المعتمد بالدينار العراقي:
+            </span>
             <div className="flex items-baseline gap-2">
               <span className="text-xl sm:text-2xl font-black text-purple-700">
                 {product.price.toLocaleString('en-US')} د.ع
               </span>
-              {product.oldPrice && (
+              {product.oldPrice && product.oldPrice !== product.price && (
                 <span className="text-xs text-slate-400 line-through font-bold">
                   {product.oldPrice.toLocaleString('en-US')}
                 </span>
@@ -117,68 +135,26 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
             <span>{product.warranty || 'ضمان وكالة رسمي'}</span>
           </div>
         </div>
-
-        {/* Quantity & Add to Cart Action */}
-        <div className="w-full mt-4 pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
-          {/* Quantity Counter */}
-          <div className="flex items-center bg-slate-100 rounded-2xl border border-slate-200/80 p-1">
-            <button
-              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-              className="w-8 h-8 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-black flex items-center justify-center transition active:scale-90 cursor-pointer shadow-sm"
-            >
-              <Minus size={14} />
-            </button>
-            <span className="w-10 text-center font-black text-sm text-slate-800">
-              {quantity}
-            </span>
-            <button
-              onClick={() => setQuantity((q) => q + 1)}
-              className="w-8 h-8 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-black flex items-center justify-center transition active:scale-90 cursor-pointer shadow-sm"
-            >
-              <Plus size={14} />
-            </button>
-          </div>
-
-          {/* Add to Cart Button */}
-          <button
-            onClick={handleAdd}
-            className={`flex-1 py-3 px-4 rounded-2xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-md cursor-pointer active:scale-95 ${
-              isAdded
-                ? 'bg-emerald-600 text-white shadow-emerald-600/20'
-                : 'bg-purple-600 hover:bg-purple-700 text-white shadow-purple-600/25'
-            }`}
-          >
-            {isAdded ? (
-              <>
-                <Check size={17} className="stroke-[3]" />
-                <span>تمت الإضافة للسلة بنجاح!</span>
-              </>
-            ) : (
-              <>
-                <ShoppingBag size={17} />
-                <span>إضافة إلى سلة الطلبات</span>
-              </>
-            )}
-          </button>
-        </div>
       </div>
 
-      {/* Showroom Status Card */}
-      <div className="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3">
+      {/* Showroom Status & Inspection Notice (Pure Catalog) */}
+      <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg flex-shrink-0">
           <Store size={20} />
         </div>
         <div>
-          <h4 className="font-black text-xs text-slate-800">معاينة وفحص الجهاز بالمعرض</h4>
-          <p className="text-[11px] text-slate-400">
-            {product.showroomLocation || 'صالة العرض الرئيسية - BRAND STORE'}
+          <h4 className="font-black text-xs text-slate-800">
+            صالة عرض وفحص الأجهزة المعتمدة - 716XSTOR
+          </h4>
+          <p className="text-[11px] text-slate-500 mt-0.5">
+            {product.showroomLocation || 'العراق - بغداد - صالة العرض الرئيسية'} • فحص العتاد وتجربة الجهاز مباشرة
           </p>
         </div>
       </div>
 
       {/* Full Technical Specifications Sheet */}
       <div className="bg-white rounded-3xl p-4 sm:p-5 border border-slate-100 shadow-sm space-y-3">
-        <h3 className="font-black text-sm text-slate-800 flex items-center gap-2">
+        <h3 className="font-black text-sm text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-2.5">
           <Cpu size={17} className="text-purple-600" />
           <span>المواصفات التقنية الدقيقة (Specifications):</span>
         </h3>
@@ -200,12 +176,13 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
         )}
       </div>
 
-      {/* Bottom Back Button */}
+      {/* Return Button */}
       <button
         onClick={onBack}
-        className="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-black rounded-2xl text-xs transition cursor-pointer"
+        className="w-full py-3.5 bg-purple-700 hover:bg-purple-800 text-white font-black rounded-2xl text-xs transition cursor-pointer shadow-lg active:scale-98 flex items-center justify-center gap-2"
       >
-        ← العودة لجميع أجهزة الكتالوج
+        <ArrowRight size={15} />
+        <span>العودة لتصفح أجهزة الكتالوج</span>
       </button>
     </motion.div>
   );
